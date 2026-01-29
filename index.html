@@ -3,459 +3,563 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام التشفير الهولوغرافي المتقدم - الذكاء الاصطناعي</title>
+    <title>مختبر OBD - إشراف: الباحث Ammar Nasir Hussein al-mantafji</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0c0c2e 0%, #1a1a3e 50%, #0c0c2e 100%);
-            color: #f5f5f5;
+            background: linear-gradient(135deg, #0a0a2a 0%, #1a1a3a 50%, #0a0a2a 100%);
+            color: #f0f0f0;
             min-height: 100vh;
             padding: 20px;
-            line-height: 1.6;
+            line-height: 1.8;
             overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(75, 207, 250, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(155, 89, 182, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(41, 128, 185, 0.1) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: -1;
-            animation: backgroundPulse 15s ease-in-out infinite alternate;
-        }
-
-        @keyframes backgroundPulse {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
         }
 
         .container {
             max-width: 1600px;
             margin: 0 auto;
-            position: relative;
+            background: rgba(10, 15, 35, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 60px rgba(0, 100, 255, 0.3);
+            border: 1px solid rgba(0, 100, 255, 0.4);
         }
 
-        /* شعار الباحث المتقدم */
-        .researcher-header {
-            background: linear-gradient(135deg, 
-                rgba(10, 15, 40, 0.97) 0%, 
-                rgba(20, 30, 70, 0.97) 50%, 
-                rgba(10, 15, 40, 0.97) 100%);
-            border-radius: 25px;
-            padding: 35px 50px;
+        /* رأس المختبر مع الباحث */
+        .lab-header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 3px solid rgba(0, 100, 255, 0.6);
             margin-bottom: 40px;
-            border: 1px solid rgba(75, 207, 250, 0.4);
-            box-shadow: 
-                0 15px 50px rgba(0, 0, 0, 0.6),
-                inset 0 0 60px rgba(75, 207, 250, 0.15),
-                0 0 100px rgba(75, 207, 250, 0.1);
+            background: linear-gradient(90deg, 
+                rgba(0, 50, 150, 0.4), 
+                rgba(0, 100, 255, 0.2),
+                rgba(0, 50, 150, 0.4));
+            border-radius: 15px;
             position: relative;
             overflow: hidden;
-            text-align: center;
-            backdrop-filter: blur(15px);
-            transform-style: preserve-3d;
-            perspective: 1000px;
         }
 
-        .researcher-header::before {
-            content: '';
+        .researcher-badge {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                linear-gradient(45deg, transparent 30%, rgba(75, 207, 250, 0.1) 50%, transparent 70%);
-            animation: shine 8s infinite linear;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #0066ff, #0044cc);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            color: white;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 102, 255, 0.3);
+            z-index: 3;
         }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        .researcher-name {
-            font-size: 3.2rem;
-            background: linear-gradient(135deg, 
-                #4bcffa 0%, 
-                #0fbcf9 25%, 
-                #00a8ff 50%, 
-                #0097e6 75%, 
-                #005a87 100%);
+        .research-title {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #4bcffa, #00a8ff, #0066ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 15px;
-            text-shadow: 
-                0 2px 10px rgba(75, 207, 250, 0.3),
-                0 4px 20px rgba(75, 207, 250, 0.2);
-            letter-spacing: 2.5px;
             font-weight: 900;
-            position: relative;
-            z-index: 2;
-            animation: textGlow 4s ease-in-out infinite alternate;
-            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(75, 207, 250, 0.3);
         }
 
-        @keyframes textGlow {
-            0% {
-                filter: drop-shadow(0 0 5px rgba(75, 207, 250, 0.3))
-                        drop-shadow(0 0 10px rgba(75, 207, 250, 0.2));
-            }
-            100% {
-                filter: drop-shadow(0 0 10px rgba(75, 207, 250, 0.5))
-                        drop-shadow(0 0 20px rgba(75, 207, 250, 0.3))
-                        drop-shadow(0 0 30px rgba(75, 207, 250, 0.1));
-            }
+        .lab-subtitle {
+            font-size: 1.5rem;
+            color: #a0e7ff;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .researcher-info {
+            font-size: 1.6rem;
+            color: #00ffaa;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .researcher-title {
-            font-size: 1.5rem;
-            color: #a0e7ff;
-            font-weight: 400;
-            letter-spacing: 1.5px;
+            font-size: 1.2rem;
+            color: #7bd5ff;
+            font-style: italic;
             margin-bottom: 20px;
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 2px 10px rgba(160, 231, 255, 0.3);
         }
 
-        .ai-badge {
+        .lab-badge {
             position: absolute;
-            top: 25px;
-            left: 25px;
-            background: linear-gradient(135deg, #ff9ff3, #f368e0);
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
             padding: 10px 20px;
             border-radius: 25px;
             font-size: 0.9rem;
             color: white;
             font-weight: 600;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 5px 20px rgba(243, 104, 224, 0.3);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.3);
             z-index: 3;
-            animation: badgePulse 3s infinite;
         }
 
-        @keyframes badgePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .ai-status {
+        .ai-lab-badge {
             position: absolute;
-            top: 25px;
-            right: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(46, 204, 113, 0.2);
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: 1px solid rgba(46, 204, 113, 0.3);
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #1dd1a1, #10ac84);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(29, 209, 161, 0.3);
             z-index: 3;
         }
 
-        .ai-status-dot {
-            width: 8px;
-            height: 8px;
-            background: #2ecc71;
-            border-radius: 50%;
-            animation: statusPulse 2s infinite;
-        }
-
-        @keyframes statusPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .ai-status-text {
-            color: #2ecc71;
+        .system-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            padding: 10px 20px;
+            border-radius: 25px;
             font-size: 0.9rem;
-            font-weight: 500;
+            color: white;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(155, 89, 182, 0.3);
+            z-index: 3;
         }
 
-        .content-wrapper {
+        .research-description {
+            max-width: 800px;
+            margin: 20px auto;
+            color: #c7ecee;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            padding: 20px;
+            background: rgba(0, 30, 80, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 100, 255, 0.2);
+        }
+
+        /* نظام المختبر الرئيسي */
+        .lab-system {
             display: grid;
-            grid-template-columns: 350px 1fr 400px;
-            gap: 25px;
-            margin-bottom: 40px;
-            min-height: 800px;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+            margin: 40px 0;
+            min-height: 700px;
         }
 
-        @media (max-width: 1400px) {
-            .content-wrapper {
+        @media (max-width: 1200px) {
+            .lab-system {
                 grid-template-columns: 1fr;
-                grid-template-rows: auto auto auto;
             }
         }
 
-        .panel {
-            background: rgba(20, 25, 60, 0.85);
-            border-radius: 20px;
+        .lab-control-panel, .lab-visualization {
+            background: rgba(0, 20, 60, 0.7);
+            border-radius: 15px;
             padding: 25px;
+            border: 2px solid rgba(0, 100, 255, 0.3);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(75, 207, 250, 0.25);
-            backdrop-filter: blur(15px);
-            transition: all 0.3s ease;
         }
 
-        .panel:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        .section-title {
+            color: #00a8ff;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 100, 255, 0.3);
+            text-align: center;
         }
 
-        .panel-title {
-            font-size: 1.4rem;
+        .subsection-title {
             color: #4bcffa;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid rgba(75, 207, 250, 0.3);
+            font-size: 1.4rem;
+            margin: 25px 0 15px 0;
+            padding-right: 15px;
+            border-right: 3px solid #4bcffa;
+        }
+
+        /* معدات المختبر */
+        .lab-equipment {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .equipment-card {
+            background: rgba(0, 30, 80, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(0, 100, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 100, 255, 0.5);
+            box-shadow: 0 10px 25px rgba(0, 100, 255, 0.2);
+        }
+
+        .equipment-icon {
+            font-size: 2.5rem;
+            color: #00a8ff;
+            margin-bottom: 15px;
+        }
+
+        .equipment-name {
+            color: #4bcffa;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .equipment-status {
+            font-size: 0.9rem;
+            color: #2ecc71;
+            font-weight: 500;
+        }
+
+        .equipment-status.offline {
+            color: #e74c3c;
+        }
+
+        /* إجراءات التجربة */
+        .experiment-procedures {
+            background: rgba(0, 30, 80, 0.5);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            border: 1px solid rgba(0, 100, 255, 0.2);
+        }
+
+        .procedure-step {
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-
-        .panel-title i {
-            font-size: 1.3rem;
-        }
-
-        .control-group {
+            gap: 15px;
             margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #c7ecee;
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        .api-key-input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(75, 207, 250, 0.3);
-            border-radius: 10px;
-            padding: 12px 15px;
-            color: #fff;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            font-family: monospace;
-        }
-
-        .api-key-input:focus {
-            outline: none;
-            border-color: #4bcffa;
-            box-shadow: 0 0 20px rgba(75, 207, 250, 0.3);
-        }
-
-        .key-display {
+            padding: 15px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            color: #7bd5ff;
-            margin-top: 10px;
-            border: 1px dashed rgba(75, 207, 250, 0.3);
-            max-height: 200px;
-            overflow-y: auto;
+            border: 1px solid rgba(0, 100, 255, 0.1);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #00a8ff, #0066ff);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            color: #4bcffa;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .step-description {
+            color: #c7ecee;
+            font-size: 0.95rem;
+        }
+
+        /* التحكم في المعاملات */
+        .parameter-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .parameter-group {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(0, 100, 255, 0.2);
+        }
+
+        .param-label {
+            display: block;
+            color: #4bcffa;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 500;
         }
 
         .slider-container {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-top: 10px;
-        }
-
-        .slider-value {
-            min-width: 60px;
-            text-align: center;
-            background: linear-gradient(135deg, rgba(75, 207, 250, 0.2), rgba(0, 168, 255, 0.2));
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            color: #4bcffa;
-            border: 1px solid rgba(75, 207, 250, 0.3);
         }
 
         input[type="range"] {
             flex: 1;
-            height: 8px;
+            height: 10px;
             -webkit-appearance: none;
-            background: linear-gradient(90deg, rgba(75, 207, 250, 0.3), rgba(0, 168, 255, 0.3));
-            border-radius: 4px;
+            background: linear-gradient(90deg, 
+                rgba(0, 100, 255, 0.3), 
+                rgba(0, 100, 255, 0.6));
+            border-radius: 5px;
             outline: none;
         }
 
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #4bcffa, #00a8ff);
+            width: 22px;
+            height: 22px;
+            background: #00a8ff;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(75, 207, 250, 0.7);
-            border: 2px solid white;
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.7);
+            border: 3px solid white;
         }
 
-        .button-group {
+        .param-value {
+            min-width: 70px;
+            text-align: center;
+            background: rgba(0, 100, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 8px;
+            color: #00a8ff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: 1px solid rgba(0, 100, 255, 0.3);
+            font-family: monospace;
+        }
+
+        /* التصور المرئي للمختبر */
+        .lab-visual {
+            position: relative;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+            border: 2px solid rgba(0, 100, 255, 0.2);
+        }
+
+        .laser-beam {
+            position: absolute;
+            left: 50px;
+            top: 50%;
+            width: 300px;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                rgba(255, 0, 0, 0), 
+                rgba(255, 0, 0, 0.8),
+                rgba(255, 0, 0, 0));
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            transform-origin: left center;
+            transition: all 1s ease;
+        }
+
+        .bulk-medium {
+            position: absolute;
+            left: 400px;
+            top: 100px;
+            width: 300px;
+            height: 200px;
+            background: radial-gradient(circle, 
+                rgba(0, 100, 255, 0.1),
+                rgba(0, 50, 150, 0.3),
+                rgba(0, 20, 60, 0.5));
+            border-radius: 10px;
+            border: 2px solid rgba(0, 100, 255, 0.3);
+            transition: all 0.5s ease;
+        }
+
+        .boundary-sensor {
+            position: absolute;
+            right: 50px;
+            top: 150px;
+            width: 200px;
+            height: 100px;
+            background: linear-gradient(135deg, 
+                rgba(46, 204, 113, 0.2),
+                rgba(39, 174, 96, 0.3));
+            border-radius: 10px;
+            border: 2px solid rgba(46, 204, 113, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .data-stream {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: calc(100% - 40px);
+            height: 80px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 100, 255, 0.3);
+            padding: 10px;
+            font-family: monospace;
+            color: #00ffaa;
+            font-size: 0.9rem;
+            overflow: hidden;
+        }
+
+        /* نتائج التجربة */
+        .experiment-results {
             display: grid;
-            gap: 12px;
-            margin-top: 20px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 25px 0;
         }
 
-        button {
-            background: linear-gradient(135deg, #4bcffa 0%, #0fbcf9 50%, #00a8ff 100%);
+        .result-metric {
+            background: rgba(0, 30, 80, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 100, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .result-metric:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 100, 255, 0.5);
+            box-shadow: 0 10px 25px rgba(0, 100, 255, 0.2);
+        }
+
+        .metric-name {
+            color: #4bcffa;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            color: #00ffaa;
+            font-size: 1.8rem;
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        .metric-unit {
+            color: #7bd5ff;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        /* أزرار التحكم */
+        .control-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #00a8ff, #0066ff);
             color: white;
             border: none;
-            padding: 14px 20px;
+            padding: 18px;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             box-shadow: 0 5px 20px rgba(0, 168, 255, 0.2);
         }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 168, 255, 0.4);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        button.secondary {
-            background: linear-gradient(135deg, #ff9ff3 0%, #f368e0 100%);
-            box-shadow: 0 5px 20px rgba(243, 104, 224, 0.2);
-        }
-
-        button.success {
-            background: linear-gradient(135deg, #1dd1a1 0%, #10ac84 100%);
-            box-shadow: 0 5px 20px rgba(29, 209, 161, 0.2);
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        @media (max-width: 768px) {
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .result-card {
-            background: rgba(10, 15, 40, 0.7);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(75, 207, 250, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .result-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #4bcffa, #00a8ff);
-        }
-
-        .result-card:hover {
+        .control-btn:hover {
             transform: translateY(-5px);
-            border-color: rgba(75, 207, 250, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 168, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 168, 255, 0.4);
         }
 
-        .result-title {
-            color: #4bcffa;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .control-btn.secondary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
         }
 
-        .result-content {
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            color: #7bd5ff;
-            font-size: 0.9rem;
-            max-height: 150px;
-            overflow-y: auto;
-            border: 1px solid rgba(75, 207, 250, 0.1);
+        .control-btn.success {
+            background: linear-gradient(135deg, #1dd1a1, #10ac84);
         }
 
-        .result-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #4bcffa;
-            text-align: center;
-            padding: 10px;
-            text-shadow: 0 2px 10px rgba(75, 207, 250, 0.3);
+        .control-btn.warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
         }
 
         /* لوحة الذكاء الاصطناعي */
-        .ai-chat {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+        .ai-analysis-panel {
+            background: linear-gradient(135deg, 
+                rgba(20, 40, 100, 0.8),
+                rgba(10, 30, 80, 0.9));
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 2px solid rgba(155, 89, 182, 0.3);
+            box-shadow: 0 10px 40px rgba(155, 89, 182, 0.2);
         }
 
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            padding: 15px;
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(155, 89, 182, 0.3);
+        }
+
+        .ai-icon {
+            font-size: 2rem;
+            color: #9b59b6;
+        }
+
+        .ai-title {
+            color: #9b59b6;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .analysis-content {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
-            border: 1px solid rgba(75, 207, 250, 0.2);
-            min-height: 300px;
-            max-height: 500px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(155, 89, 182, 0.2);
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        .message {
+        .analysis-message {
             margin-bottom: 15px;
-            padding: 12px 15px;
-            border-radius: 10px;
-            max-width: 85%;
-            animation: messageAppear 0.3s ease;
+            padding: 15px;
+            border-radius: 8px;
+            animation: messageAppear 0.5s ease;
         }
 
         @keyframes messageAppear {
@@ -469,42 +573,43 @@
             }
         }
 
-        .message.user {
-            background: linear-gradient(135deg, rgba(75, 207, 250, 0.2), rgba(0, 168, 255, 0.2));
-            margin-left: auto;
-            margin-right: 0;
-            border: 1px solid rgba(75, 207, 250, 0.3);
-        }
-
-        .message.ai {
-            background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(142, 68, 173, 0.2));
+        .message-ai {
+            background: rgba(155, 89, 182, 0.2);
+            border: 1px solid rgba(155, 89, 182, 0.3);
             margin-right: auto;
             margin-left: 0;
-            border: 1px solid rgba(155, 89, 182, 0.3);
+            max-width: 85%;
+        }
+
+        .message-user {
+            background: rgba(0, 100, 255, 0.2);
+            border: 1px solid rgba(0, 100, 255, 0.3);
+            margin-left: auto;
+            margin-right: 0;
+            max-width: 85%;
         }
 
         .message-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 5px;
+            gap: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: #4bcffa;
         }
 
-        .message.ai .message-header {
+        .ai-message-header {
             color: #9b59b6;
         }
 
-        .message-content {
-            line-height: 1.5;
+        .user-message-header {
+            color: #00a8ff;
         }
 
         .typing-indicator {
             display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 10px 15px;
+            gap: 8px;
+            padding: 15px;
             background: rgba(155, 89, 182, 0.2);
             border-radius: 10px;
             width: fit-content;
@@ -512,8 +617,8 @@
         }
 
         .typing-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: #9b59b6;
             border-radius: 50%;
             animation: typing 1.4s infinite;
@@ -524,45 +629,23 @@
 
         @keyframes typing {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .chat-input-container {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(75, 207, 250, 0.3);
-            border-radius: 10px;
-            padding: 12px 15px;
-            color: #fff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: #4bcffa;
-            box-shadow: 0 0 20px rgba(75, 207, 250, 0.3);
+            50% { transform: translateY(-10px); }
         }
 
         .ai-suggestions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 15px;
+            gap: 15px;
+            margin-top: 25px;
         }
 
         .suggestion-btn {
             background: rgba(155, 89, 182, 0.2);
             border: 1px solid rgba(155, 89, 182, 0.3);
             color: #d2b4de;
-            padding: 8px 12px;
+            padding: 12px;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
@@ -570,48 +653,22 @@
 
         .suggestion-btn:hover {
             background: rgba(155, 89, 182, 0.3);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
         }
 
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #c7ecee;
-            font-size: 0.9rem;
-        }
-
-        .model-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .model-select {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(75, 207, 250, 0.3);
-            border-radius: 8px;
-            padding: 10px;
-            color: #fff;
-            font-size: 0.9rem;
-        }
-
+        /* شاشة التحميل */
         .loading-overlay {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(10, 15, 40, 0.9);
+            background: rgba(10, 15, 35, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 20px;
-            z-index: 100;
+            z-index: 1000;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
@@ -622,541 +679,933 @@
             visibility: visible;
         }
 
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(75, 207, 250, 0.3);
-            border-top-color: #4bcffa;
+        .lab-spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(0, 100, 255, 0.3);
+            border-top: 5px solid #00a8ff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
+        .loading-text {
+            color: #00a8ff;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* تذييل الصفحة */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(0, 100, 255, 0.3);
+            color: #7bd5ff;
+            font-size: 0.95rem;
+        }
+
+        .researcher-signature {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 30, 80, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 100, 255, 0.2);
+        }
+
+        .signature-text {
+            color: #00ffaa;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .researcher-name-footer {
+            color: #00a8ff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
         @media (max-width: 768px) {
-            .researcher-name {
-                font-size: 2rem;
+            .lab-system {
+                grid-template-columns: 1fr;
             }
             
-            .researcher-title {
-                font-size: 1.2rem;
-            }
-            
+            .parameter-controls,
+            .experiment-results,
+            .control-buttons,
             .ai-suggestions {
                 grid-template-columns: 1fr;
             }
+            
+            .research-title {
+                font-size: 2rem;
+            }
+            
+            .researcher-info {
+                font-size: 1.3rem;
+            }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- شاشة التحميل -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="lab-spinner"></div>
+        <div class="loading-text" id="loading-text">جاري إعداد مختبر OBD...</div>
+    </div>
+
     <div class="container">
-        <!-- شعار الباحث مع الذكاء الاصطناعي -->
-        <div class="researcher-header">
-            <div class="ai-badge">
-                <i class="fas fa-brain"></i> مدعوم بالذكاء الاصطناعي
+        <!-- رأس المختبر -->
+        <div class="lab-header">
+            <div class="researcher-badge">
+                <i class="fas fa-user-tie"></i> باحث رئيسي
             </div>
-            <div class="ai-status">
-                <div class="ai-status-dot"></div>
-                <div class="ai-status-text">OpenRouter متصل</div>
+            <div class="lab-badge">
+                <i class="fas fa-flask"></i> مختبر OBD تجريبي
             </div>
-            <h1 class="researcher-name">Ammar Nasir Hussein al-mantafji</h1>
-            <p class="researcher-title">نظام التشفير الهولوغرافي المتقدم - الإصدار الذكي</p>
+            <div class="ai-lab-badge">
+                <i class="fas fa-robot"></i> مدعوم بالذكاء الاصطناعي
+            </div>
+            <div class="system-badge">
+                <i class="fas fa-atom"></i> نظام كمي متقدم
+            </div>
+            
+            <h1 class="research-title">مختبر Observable Boundary Dynamics (OBD)</h1>
+            <p class="lab-subtitle">نظام محاكاة متقدم للبحث العلمي التجريبي</p>
+            
+            <div class="researcher-info">إشراف: الباحث</div>
+            <div class="researcher-title">Ammar Nasir Hussein al-mantafji</div>
+            
+            <div class="research-description">
+                مختبر OBD هو نظام محاكاة متقدم يطبق أبحاث Observable Boundary Dynamics التي تدرس انتقال المعلومات 
+                من "الداخل" (Bulk) إلى "الحدود" (Boundary) في الأنظمة الهولوغرافية. هذا النظام يدمج الذكاء الاصطناعي 
+                لتحليل النتائج ومقارنتها بالبحث الأكاديمي الأصلي.
+            </div>
         </div>
 
-        <div class="content-wrapper">
+        <!-- نظام المختبر الرئيسي -->
+        <div class="lab-system">
             <!-- لوحة التحكم -->
-            <div class="panel">
-                <h2 class="panel-title"><i class="fas fa-sliders-h"></i> الإعدادات</h2>
+            <div class="lab-control-panel">
+                <h2 class="section-title"><i class="fas fa-sliders-h"></i> لوحة تحكم المختبر</h2>
                 
-                <div class="control-group">
-                    <label for="api-key"><i class="fas fa-key"></i> مفتاح OpenRouter API:</label>
-                    <input type="password" id="api-key" class="api-key-input" 
-                           placeholder="أدخل مفتاح OpenRouter API الخاص بك">
-                    <div style="margin-top: 10px; font-size: 0.8rem; color: #a0d2db;">
-                        <i class="fas fa-info-circle"></i>
-                        احصل على مفتاح مجاني من <a href="https://openrouter.ai" target="_blank" 
-                        style="color: #4bcffa;">OpenRouter.ai</a>
-                    </div>
-                </div>
-                
-                <div class="model-selector">
-                    <label for="ai-model"><i class="fas fa-robot"></i> النموذج:</label>
-                    <select id="ai-model" class="model-select">
-                        <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                        <option value="openai/gpt-4">GPT-4</option>
-                        <option value="anthropic/claude-3-haiku">Claude 3 Haiku</option>
-                        <option value="google/gemini-pro">Gemini Pro</option>
-                        <option value="meta-llama/llama-3-70b-instruct">Llama 3 70B</option>
-                    </select>
-                </div>
-                
-                <div class="control-group">
-                    <label for="quantum-key"><i class="fas fa-lock"></i> المفتاح الكمومي:</label>
-                    <div class="key-display" id="quantum-key-display">
-                        [1, 0, 1, 1, 0, 1, 0, 1, 1, 0]
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label><i class="fas fa-random"></i> شدة التشتيت:</label>
-                    <div class="slider-container">
-                        <input type="range" id="scramble-intensity" min="1" max="10" value="5" step="1">
-                        <span class="slider-value" id="intensity-display">5</span>
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label><i class="fas fa-expand-arrows-alt"></i> حجم البعد:</label>
-                    <div class="slider-container">
-                        <input type="range" id="dimension-size" min="2" max="20" value="5" step="1">
-                        <span class="slider-value" id="dimension-display">5</span>
-                    </div>
-                </div>
-                
-                <div class="button-group">
-                    <button id="scramble-btn" class="success">
-                        <i class="fas fa-project-diagram"></i> تشفير هولوغرافي
-                    </button>
-                    <button id="analyze-ai-btn" class="secondary">
-                        <i class="fas fa-brain"></i> تحليل بالذكاء الاصطناعي
-                    </button>
-                    <button id="generate-report">
-                        <i class="fas fa-file-alt"></i> توليد تقرير
-                    </button>
-                </div>
-            </div>
-            
-            <!-- النتائج والتشغيل -->
-            <div class="panel">
-                <div class="loading-overlay" id="loading-overlay">
-                    <div class="spinner"></div>
-                    <div>جاري المعالجة...</div>
-                </div>
-                
-                <h2 class="panel-title"><i class="fas fa-chart-network"></i> نتائج التشفير</h2>
-                
-                <div class="results-grid">
-                    <div class="result-card">
-                        <h3 class="result-title"><i class="fas fa-key"></i> المفتاح الأصلي</h3>
-                        <div class="result-content" id="original-key">[1, 0, 1, 1, 0, 1, 0, 1, 1, 0]</div>
-                        <div class="result-value" id="key-length">10 بت</div>
-                    </div>
-                    
-                    <div class="result-card">
-                        <h3 class="result-title"><i class="fas fa-cube"></i> الحالة المشتتة</h3>
-                        <div class="result-content" id="bulk-state">لم يتم التشفير بعد</div>
-                        <div class="result-value" id="bulk-size">-</div>
-                    </div>
-                    
-                    <div class="result-card">
-                        <h3 class="result-title"><i class="fas fa-broadcast-tower"></i> بصمة الحدود</h3>
-                        <div class="result-content" id="boundary-signature">-</div>
-                        <div class="result-value" id="signature-value">0.00</div>
-                    </div>
-                    
-                    <div class="result-card">
-                        <h3 class="result-title"><i class="fas fa-shield-alt"></i> قوة التشفير</h3>
-                        <div class="result-content" id="encryption-strength">-</div>
-                        <div class="result-value" id="strength-value">0%</div>
-                    </div>
-                </div>
-                
-                <div class="ai-suggestions">
-                    <div class="suggestion-btn" data-prompt="اشرح لي مبدأ الإسقاط الهولوغرافي">
-                        شرح المبدأ العلمي
-                    </div>
-                    <div class="suggestion-btn" data-prompt="كيف يمكن تطبيق هذا النظام في الواقع؟">
-                        التطبيقات العملية
-                    </div>
-                    <div class="suggestion-btn" data-prompt="ما هي نقاط القوة والضعف في هذا النوع من التشفير؟">
-                        التحليل النقدي
-                    </div>
-                    <div class="suggestion-btn" data-prompt="ما هي البدائل لهذا النظام؟">
-                        البدائل المقترحة
-                    </div>
-                </div>
-            </div>
-            
-            <!-- لوحة الذكاء الاصطناعي -->
-            <div class="panel ai-chat">
-                <h2 class="panel-title"><i class="fas fa-robot"></i> مساعد الذكاء الاصطناعي</h2>
-                
-                <div class="chat-messages" id="chat-messages">
-                    <div class="message ai">
-                        <div class="message-header">
-                            <i class="fas fa-robot"></i>
-                            مساعد التشفير الهولوغرافي
+                <h3 class="subsection-title"><i class="fas fa-microscope"></i> معدات المختبر</h3>
+                <div class="lab-equipment">
+                    <div class="equipment-card" id="laser-equipment">
+                        <div class="equipment-icon">
+                            <i class="fas fa-satellite-dish"></i>
                         </div>
-                        <div class="message-content">
-                            مرحباً! أنا مساعد الذكاء الاصطناعي المتخصص في التشفير الهولوغرافي والفيزياء الكمومية. 
-                            يمكنني مساعدتك في:
-                            <br><br>
-                            • شرح المفاهيم العلمية المعقدة
-                            <br>
-                            • تحليل نتائج التشفير
-                            <br>
-                            • توليد تقارير متقدمة
-                            <br>
-                            • الإجابة على أسئلتك
-                            <br><br>
-                            أدخل مفتاح OpenRouter API لبدء المحادثة.
+                        <div class="equipment-name">مصدر ليزر متماسك</div>
+                        <div class="equipment-status" id="laser-status">🟢 جاهز</div>
+                    </div>
+                    
+                    <div class="equipment-card" id="scrambler-equipment">
+                        <div class="equipment-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <div class="equipment-name">وسط التشتيت (Bulk)</div>
+                        <div class="equipment-status" id="scrambler-status">🟢 نشط</div>
+                    </div>
+                    
+                    <div class="equipment-card" id="sensor-equipment">
+                        <div class="equipment-icon">
+                            <i class="fas fa-satellite"></i>
+                        </div>
+                        <div class="equipment-name">مستشعر الحدود</div>
+                        <div class="equipment-status" id="sensor-status">🟢 يعمل</div>
+                    </div>
+                    
+                    <div class="equipment-card" id="ai-processor">
+                        <div class="equipment-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="equipment-name">معالج الذكاء الاصطناعي</div>
+                        <div class="equipment-status" id="ai-status">🟢 متصل</div>
+                    </div>
+                </div>
+
+                <!-- إجراءات التجربة -->
+                <h3 class="subsection-title"><i class="fas fa-vial"></i> إجراءات التجربة</h3>
+                <div class="experiment-procedures">
+                    <div class="procedure-step" id="step-1">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">إعداد العينة</div>
+                            <div class="step-description">تحضير وسط التشتيت عالي الإنتروبيا</div>
+                        </div>
+                    </div>
+                    
+                    <div class="procedure-step" id="step-2">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">حقن البيانات</div>
+                            <div class="step-description">ترميز المعلومات في الحالة الكمومية الأولية</div>
+                        </div>
+                    </div>
+                    
+                    <div class="procedure-step" id="step-3">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">التشتيت الوحدوي</div>
+                            <div class="step-description">تفعيل مصفوفة التشتيت U(t)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="procedure-step" id="step-4">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">الاستشعار والتحليل</div>
+                            <div class="step-description">قراءة أنماط التداخل على الحدود</div>
                         </div>
                     </div>
                 </div>
+
+                <!-- معاملات التجربة -->
+                <h3 class="subsection-title"><i class="fas fa-tachometer-alt"></i> معاملات التجربة</h3>
+                <div class="parameter-controls">
+                    <div class="parameter-group">
+                        <label class="param-label">شدة الليزر (mW)</label>
+                        <div class="slider-container">
+                            <input type="range" id="laser-power" min="1" max="100" value="50">
+                            <span class="param-value" id="laser-power-value">50</span>
+                        </div>
+                    </div>
+                    
+                    <div class="parameter-group">
+                        <label class="param-label">إنتروبيا الوسط</label>
+                        <div class="slider-container">
+                            <input type="range" id="medium-entropy" min="1" max="100" value="75">
+                            <span class="param-value" id="entropy-value">75</span>
+                        </div>
+                    </div>
+                    
+                    <div class="parameter-group">
+                        <label class="param-label">زمن التشتيت (ms)</label>
+                        <div class="slider-container">
+                            <input type="range" id="scramble-time" min="1" max="1000" value="500">
+                            <span class="param-value" id="time-value">500</span>
+                        </div>
+                    </div>
+                    
+                    <div class="parameter-group">
+                        <label class="param-label">ضوضاء المحيط (dB)</label>
+                        <div class="slider-container">
+                            <input type="range" id="noise-level" min="0" max="100" value="25">
+                            <span class="param-value" id="noise-value">25</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التصور المرئي والنتائج -->
+            <div class="lab-visualization">
+                <h2 class="section-title"><i class="fas fa-chart-line"></i> التصور التجريبي</h2>
                 
-                <div class="chat-input-container">
-                    <input type="text" class="chat-input" id="chat-input" 
-                           placeholder="اسأل عن أي شيء متعلق بالتشفير الهولوغرافي...">
-                    <button id="send-message">
-                        <i class="fas fa-paper-plane"></i>
+                <!-- التصور المرئي للمختبر -->
+                <div class="lab-visual">
+                    <div class="laser-beam" id="laser-beam"></div>
+                    <div class="bulk-medium" id="bulk-medium"></div>
+                    <div class="boundary-sensor" id="boundary-sensor">
+                        <i class="fas fa-wifi"></i> مستشعر الحدود
+                    </div>
+                    <div class="data-stream" id="data-stream">
+                        <div>📊 تيار البيانات الحي:</div>
+                        <div id="stream-content">جاري انتظار البيانات...</div>
+                    </div>
+                </div>
+
+                <!-- نتائج التجربة -->
+                <h3 class="subsection-title"><i class="fas fa-clipboard-list"></i> قياسات النتائج</h3>
+                <div class="experiment-results">
+                    <div class="result-metric">
+                        <div class="metric-name">رؤية الداخل</div>
+                        <div class="metric-value" id="bulk-visibility">4.2</div>
+                        <div class="metric-unit">%</div>
+                    </div>
+                    
+                    <div class="result-metric">
+                        <div class="metric-name">ارتباط الحدود</div>
+                        <div class="metric-value" id="boundary-correlation">0.98</div>
+                        <div class="metric-unit">معامل</div>
+                    </div>
+                    
+                    <div class="result-metric">
+                        <div class="metric-name">دقة الاسترداد</div>
+                        <div class="metric-value" id="recovery-fidelity">99.1</div>
+                        <div class="metric-unit">%</div>
+                    </div>
+                    
+                    <div class="result-metric">
+                        <div class="metric-name">أس ليابانوف</div>
+                        <div class="metric-value" id="lyapunov-exponent">0.42</div>
+                        <div class="metric-unit">λ<sub>L</sub></div>
+                    </div>
+                </div>
+
+                <!-- أزرار التحكم -->
+                <div class="control-buttons">
+                    <button class="control-btn success" onclick="runExperiment()">
+                        <i class="fas fa-play-circle"></i> تشغيل التجربة
+                    </button>
+                    
+                    <button class="control-btn" onclick="analyzeResults()">
+                        <i class="fas fa-brain"></i> تحليل النتائج
+                    </button>
+                    
+                    <button class="control-btn warning" onclick="generateReport()">
+                        <i class="fas fa-file-alt"></i> تقرير مفصل
+                    </button>
+                    
+                    <button class="control-btn secondary" onclick="resetExperiment()">
+                        <i class="fas fa-redo"></i> إعادة تعيين
                     </button>
                 </div>
             </div>
         </div>
-        
-        <footer>
-            <p>© 2024 نظام التشفير الهولوغرافي المتقدم - الإصدار المدعوم بالذكاء الاصطناعي</p>
-            <p style="margin-top: 10px; color: #4bcffa;">
+
+        <!-- لوحة تحليل الذكاء الاصطناعي -->
+        <div class="ai-analysis-panel">
+            <div class="ai-header">
+                <i class="fas fa-robot ai-icon"></i>
+                <h2 class="ai-title">محلل الذكاء الاصطناعي للمختبر</h2>
+            </div>
+            
+            <div class="analysis-content" id="ai-analysis-content">
+                <div class="analysis-message message-ai">
+                    <div class="message-header ai-message-header">
+                        <i class="fas fa-robot"></i> مساعد OBD
+                    </div>
+                    <div class="message-content">
+                        مرحباً بك في مختبر OBD التجريبي! أنا مساعد الذكاء الاصطناعي المتخصص في تحليل نتائج تجارب Observable Boundary Dynamics.
+                        <br><br>
+                        يمكنني مساعدتك في:
+                        <br>• تحليل القياسات التجريبية
+                        <br>• تفسير النتائج وفق النموذج النظري
+                        <br>• اقتراح تحسينات للتجربة
+                        <br>• كتابة تقارير علمية مفصلة
+                        <br><br>
+                        تم تطوير هذا النظام تحت إشراف الباحث Ammar Nasir Hussein al-mantafji.
+                    </div>
+                </div>
+            </div>
+
+            <!-- اقتراحات سريعة -->
+            <div class="ai-suggestions">
+                <div class="suggestion-btn" onclick="askAI('حلل نتائج التجربة الحالية وفق النموذج النظري OBD')">
+                    📊 تحليل النتائج الحالية
+                </div>
+                <div class="suggestion-btn" onclick="askAI('ما هي العوامل المؤثرة على أس ليابانوف في هذه التجربة؟')">
+                    🔬 تفسير أس ليابانوف
+                </div>
+                <div class="suggestion-btn" onclick="askAI('اقترح تحسينات لزيادة دقة الاسترداد')">
+                    ⚡ اقتراح تحسينات
+                </div>
+                <div class="suggestion-btn" onclick="askAI('قارن بين هذه النتائج والنتائج في البحث الأصلي')">
+                    📈 مقارنة مع البحث
+                </div>
+            </div>
+        </div>
+
+        <!-- تذييل الصفحة -->
+        <div class="footer">
+            <div class="researcher-signature">
+                <div class="signature-text">تم تطوير هذا النظام البحثي المتقدم تحت إشراف:</div>
+                <div class="researcher-name-footer">الباحث Ammar Nasir Hussein al-mantafji</div>
+            </div>
+            
+            <p style="margin-top: 30px;">© 2026 مختبر OBD التجريبي المتقدم - نظام بحثي كمي هولوغرافي</p>
+            <p style="margin-top: 15px; color: #4bcffa;">
                 <i class="fas fa-exclamation-circle"></i>
-                هذا النظام يستخدم OpenRouter للوصول إلى نماذج الذكاء الاصطناعي المتقدمة
+                هذا النظام يحاكي التجارب الحقيقية في مختبر OBD مع تحليل ذكي للنتائج باستخدام الذكاء الاصطناعي
             </p>
-        </footer>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #7bd5ff;">
+                المرجع البحثي: OBD_New29_1_2026.pdf - بحث Observable Boundary Dynamics
+            </p>
+        </div>
     </div>
 
     <script>
         // متغيرات النظام
-        let currentApiKey = '';
-        let currentModel = 'openai/gpt-3.5-turbo';
+        let currentExperiment = null;
+        let experimentResults = null;
+        let apiKey = localStorage.getItem('obd_lab_api_key') || '';
+        let aiModel = 'openai/gpt-3.5-turbo';
         let chatHistory = [];
-        let encryptionResults = null;
-        
+
         // عناصر DOM
-        const apiKeyInput = document.getElementById('api-key');
-        const modelSelect = document.getElementById('ai-model');
-        const intensitySlider = document.getElementById('scramble-intensity');
-        const intensityDisplay = document.getElementById('intensity-display');
-        const dimensionSlider = document.getElementById('dimension-size');
-        const dimensionDisplay = document.getElementById('dimension-display');
-        const scrambleBtn = document.getElementById('scramble-btn');
-        const analyzeAiBtn = document.getElementById('analyze-ai-btn');
-        const generateReportBtn = document.getElementById('generate-report');
-        const sendMessageBtn = document.getElementById('send-message');
-        const chatInput = document.getElementById('chat-input');
-        const chatMessages = document.getElementById('chat-messages');
         const loadingOverlay = document.getElementById('loading-overlay');
-        const suggestionButtons = document.querySelectorAll('.suggestion-btn');
-        
-        // عناصر النتائج
-        const originalKeyElement = document.getElementById('original-key');
-        const keyLengthElement = document.getElementById('key-length');
-        const bulkStateElement = document.getElementById('bulk-state');
-        const bulkSizeElement = document.getElementById('bulk-size');
-        const boundarySignatureElement = document.getElementById('boundary-signature');
-        const signatureValueElement = document.getElementById('signature-value');
-        const encryptionStrengthElement = document.getElementById('encryption-strength');
-        const strengthValueElement = document.getElementById('strength-value');
-        const quantumKeyDisplay = document.getElementById('quantum-key-display');
-        
+        const loadingText = document.getElementById('loading-text');
+        const aiAnalysisContent = document.getElementById('ai-analysis-content');
+        const dataStreamContent = document.getElementById('stream-content');
+
         // تهيئة النظام
         document.addEventListener('DOMContentLoaded', function() {
-            loadSavedSettings();
-            updateDisplays();
-            generateRandomKey();
-            runInitialScrambling();
+            showLoading('جاري إعداد مختبر OBD...');
             
-            // إضافة مستمعي الأحداث
-            intensitySlider.addEventListener('input', updateDisplays);
-            dimensionSlider.addEventListener('input', updateDisplays);
-            modelSelect.addEventListener('change', updateModel);
-            apiKeyInput.addEventListener('change', saveApiKey);
+            // تشغيل التهيئة المرئية
+            initializeVisualization();
             
-            scrambleBtn.addEventListener('click', runScrambling);
-            analyzeAiBtn.addEventListener('click', analyzeWithAI);
-            generateReportBtn.addEventListener('click', generateReport);
-            sendMessageBtn.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') sendMessage();
-            });
-            
-            suggestionButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const prompt = this.getAttribute('data-prompt');
-                    chatInput.value = prompt;
-                    sendMessage();
-                });
-            });
+            // بدء محاكاة أولية
+            setTimeout(() => {
+                hideLoading();
+                runInitialDemo();
+            }, 2000);
         });
-        
-        // تحديث العروض
-        function updateDisplays() {
-            intensityDisplay.textContent = intensitySlider.value;
-            dimensionDisplay.textContent = dimensionSlider.value;
+
+        // إظهار شاشة التحميل
+        function showLoading(text) {
+            loadingText.textContent = text;
+            loadingOverlay.classList.add('active');
         }
-        
-        function updateModel() {
-            currentModel = modelSelect.value;
-            localStorage.setItem('holographic_ai_model', currentModel);
+
+        // إخفاء شاشة التحميل
+        function hideLoading() {
+            loadingOverlay.classList.remove('active');
         }
-        
-        function saveApiKey() {
-            currentApiKey = apiKeyInput.value;
-            localStorage.setItem('holographic_api_key', currentApiKey);
-            updateAIStatus();
-        }
-        
-        function loadSavedSettings() {
-            const savedKey = localStorage.getItem('holographic_api_key');
-            const savedModel = localStorage.getItem('holographic_ai_model');
+
+        // تهيئة التصور المرئي
+        function initializeVisualization() {
+            updateEquipmentStatus('laser-equipment', '🟢 جاهز');
+            updateEquipmentStatus('scrambler-equipment', '🟢 نشط');
+            updateEquipmentStatus('sensor-equipment', '🟢 يعمل');
+            updateEquipmentStatus('ai-processor', apiKey ? '🟢 متصل' : '🟡 يحتاج API');
             
-            if (savedKey) {
-                currentApiKey = savedKey;
-                apiKeyInput.value = savedKey;
+            // تحديث حالة الخطوات
+            updateExperimentStep(1);
+        }
+
+        // تحديث حالة المعدات
+        function updateEquipmentStatus(equipmentId, status) {
+            const equipment = document.getElementById(equipmentId);
+            const statusElement = equipment.querySelector('.equipment-status');
+            statusElement.textContent = status;
+            
+            if (status.includes('🟢')) {
+                statusElement.classList.remove('offline');
+            } else {
+                statusElement.classList.add('offline');
+            }
+        }
+
+        // تحديث خطوة التجربة
+        function updateExperimentStep(stepNumber) {
+            // إعادة تعيين جميع الخطوات
+            for (let i = 1; i <= 4; i++) {
+                const step = document.getElementById(`step-${i}`);
+                step.style.opacity = '0.6';
+                step.style.borderColor = 'rgba(0, 100, 255, 0.1)';
             }
             
-            if (savedModel) {
-                currentModel = savedModel;
-                modelSelect.value = savedModel;
-            }
-            
-            updateAIStatus();
+            // تمييز الخطوة الحالية
+            const currentStep = document.getElementById(`step-${stepNumber}`);
+            currentStep.style.opacity = '1';
+            currentStep.style.borderColor = 'rgba(0, 100, 255, 0.3)';
         }
-        
-        function updateAIStatus() {
-            const statusText = currentApiKey ? 'OpenRouter متصل' : 'أدخل مفتاح API';
-            document.querySelector('.ai-status-text').textContent = statusText;
-            document.querySelector('.ai-status-dot').style.background = 
-                currentApiKey ? '#2ecc71' : '#e74c3c';
+
+        // تحديث التصور المرئي
+        function updateVisualization() {
+            const laserPower = parseInt(document.getElementById('laser-power').value);
+            const entropy = parseInt(document.getElementById('medium-entropy').value);
+            const noise = parseInt(document.getElementById('noise-level').value);
+            
+            // تحديث شعاع الليزر
+            const laserBeam = document.getElementById('laser-beam');
+            laserBeam.style.width = `${100 + laserPower * 2}px`;
+            laserBeam.style.opacity = laserPower / 100;
+            
+            // تحديث وسط التشتيت
+            const bulkMedium = document.getElementById('bulk-medium');
+            const scrambleIntensity = entropy / 100;
+            bulkMedium.style.background = `
+                radial-gradient(circle, 
+                    rgba(0, ${100 + entropy}, 255, ${0.1 + scrambleIntensity * 0.2}),
+                    rgba(0, ${50 + entropy * 0.5}, 150, ${0.2 + scrambleIntensity * 0.3}),
+                    rgba(0, 20, 60, ${0.3 + scrambleIntensity * 0.4})
+                )
+            `;
+            
+            // تحديث تيار البيانات
+            updateDataStream();
         }
-        
-        // توليد مفتاح عشوائي
-        function generateRandomKey() {
-            const length = Math.floor(Math.random() * 8) + 6;
-            let key = [];
-            for (let i = 0; i < length; i++) {
-                key.push(Math.random() > 0.5 ? 1 : 0);
-            }
-            quantumKeyDisplay.textContent = '[' + key.join(', ') + ']';
-            return key;
+
+        // تحديث تيار البيانات
+        function updateDataStream() {
+            const time = new Date();
+            const entropy = parseInt(document.getElementById('medium-entropy').value);
+            const noise = parseInt(document.getElementById('noise-level').value);
+            
+            const dataPoints = [
+                `🕒 ${time.toLocaleTimeString('ar-SA')}`,
+                `📊 إنتروبيا: ${entropy}%`,
+                `🔊 ضوضاء: ${noise}dB`,
+                `🌡️ حرارة: ${(25 + Math.random() * 5).toFixed(1)}°C`,
+                `⚡ طاقة: ${(Math.random() * 100).toFixed(1)}mW`
+            ];
+            
+            const randomData = dataPoints[Math.floor(Math.random() * dataPoints.length)];
+            dataStreamContent.textContent = randomData;
         }
-        
-        // خوارزمية التشفير الهولوغرافي
-        function holographicScramble(secretKey, intensity, dimension) {
-            const size = Math.max(secretKey.length, dimension);
-            
-            // إنشاء مصفوفة تشتيت
-            let scrambler = createScramblerMatrix(size, intensity);
-            
-            // توسيع المفتاح
-            let extendedKey = [...secretKey];
-            while (extendedKey.length < size) {
-                extendedKey.push(Math.random() > 0.5 ? 1 : 0);
-            }
-            
-            // تطبيق التشتيت
-            let scrambledBulk = applyScrambling(scrambler, extendedKey);
-            
-            // حساب بصمة الحدود
-            let boundarySignature = calculateSignature(scrambledBulk);
-            
-            // حساب قوة التشفير
-            let encryptionStrength = calculateStrength(scrambledBulk, extendedKey);
-            
-            return {
-                key: secretKey,
-                extendedKey: extendedKey,
-                scrambler: scrambler,
-                scrambledBulk: scrambledBulk,
-                boundarySignature: boundarySignature,
-                encryptionStrength: encryptionStrength,
-                intensity: intensity,
-                dimension: dimension
-            };
-        }
-        
-        function createScramblerMatrix(size, intensity) {
-            let matrix = [];
-            const factor = intensity / 5;
-            
-            for (let i = 0; i < size; i++) {
-                matrix[i] = [];
-                for (let j = 0; j < size; j++) {
-                    // إنشاء قيم معقدة مع بعض الأنماط
-                    let angle = (i * j) * Math.PI / size;
-                    matrix[i][j] = {
-                        real: (Math.cos(angle) + (Math.random() - 0.5) * factor) * intensity,
-                        imag: (Math.sin(angle) + (Math.random() - 0.5) * factor) * intensity
-                    };
-                }
-            }
-            
-            return matrix;
-        }
-        
-        function applyScrambling(matrix, vector) {
-            let result = [];
-            
-            for (let i = 0; i < matrix.length; i++) {
-                let real = 0;
-                let imag = 0;
-                
-                for (let j = 0; j < matrix[i].length; j++) {
-                    real += matrix[i][j].real * vector[j];
-                    imag += matrix[i][j].imag * vector[j];
-                }
-                
-                // تحويل إلى مقدار حقيقي
-                result.push(Math.sqrt(real * real + imag * imag));
-            }
-            
-            return result;
-        }
-        
-        function calculateSignature(vector) {
-            let norm = 0;
-            let entropy = 0;
-            let mean = 0;
-            
-            // حساب القاعدة
-            for (let val of vector) {
-                norm += val * val;
-            }
-            norm = Math.sqrt(norm);
-            
-            // حساب المتوسط
-            mean = vector.reduce((a, b) => a + b, 0) / vector.length;
-            
-            // حساب الإنتروبيا
-            let normalized = vector.map(x => x / norm);
-            for (let p of normalized) {
-                if (p > 0) {
-                    entropy -= p * Math.log2(p);
-                }
-            }
-            
-            // بصمة مركبة
-            let signature = norm * (1 + entropy / 10);
-            
-            return {
-                norm: norm,
-                entropy: entropy,
-                mean: mean,
-                signature: signature
-            };
-        }
-        
-        function calculateStrength(bulk, original) {
-            // قياس مدى اختلاف الناتج عن الأصل
-            let similarity = 0;
-            let maxVal = Math.max(...bulk);
-            
-            for (let i = 0; i < Math.min(bulk.length, original.length); i++) {
-                if (original[i] === 1) {
-                    similarity += bulk[i] / maxVal;
-                }
-            }
-            
-            similarity /= original.filter(x => x === 1).length || 1;
-            
-            // قوة التشفير عكسية للتماثل
-            let strength = (1 - similarity) * 100;
-            
-            return Math.max(0, Math.min(100, strength));
-        }
-        
-        // تشغيل التشفير
-        function runScrambling() {
-            showLoading();
-            
-            const key = parseKey(quantumKeyDisplay.textContent);
-            const intensity = parseInt(intensitySlider.value);
-            const dimension = parseInt(dimensionSlider.value);
+
+        // تشغيل تجربة أولية توضيحية
+        function runInitialDemo() {
+            showLoading('جاري تشغيل التجربة التوضيحية...');
             
             setTimeout(() => {
-                encryptionResults = holographicScramble(key, intensity, dimension);
+                // محاكاة خطوات التجربة
+                simulateExperimentSteps();
                 
-                // تحديث الواجهة
-                updateResultsDisplay();
-                animateResults();
+                // حساب النتائج
+                calculateResults();
+                
                 hideLoading();
+            }, 1500);
+        }
+
+        // محاكاة خطوات التجربة
+        function simulateExperimentSteps() {
+            // الخطوة 1: إعداد العينة
+            updateExperimentStep(1);
+            showNotification('جاري تحضير وسط التشتيت عالي الإنتروبيا...');
+            
+            setTimeout(() => {
+                // الخطوة 2: حقن البيانات
+                updateExperimentStep(2);
+                showNotification('جاري ترميز البيانات في الحالة الكمومية...');
                 
-                // إضافة رسالة AI تلقائية
-                addAIMessage("تمت عملية التشفير الهولوغرافي بنجاح! يمكنني الآن تحليل النتائج لك.");
-                
+                setTimeout(() => {
+                    // الخطوة 3: التشتيت الوحدوي
+                    updateExperimentStep(3);
+                    showNotification('تفعيل مصفوفة التشتيت U(t)...');
+                    
+                    setTimeout(() => {
+                        // الخطوة 4: الاستشعار والتحليل
+                        updateExperimentStep(4);
+                        showNotification('قراءة أنماط التداخل على الحدود...');
+                        
+                        // تشغيل التأثيرات المرئية
+                        runVisualEffects();
+                        
+                    }, 800);
+                }, 800);
             }, 800);
         }
-        
-        function runInitialScrambling() {
-            const key = parseKey(quantumKeyDisplay.textContent);
-            encryptionResults = holographicScramble(key, 5, 5);
+
+        // تشغيل التأثيرات المرئية
+        function runVisualEffects() {
+            const laserBeam = document.getElementById('laser-beam');
+            const bulkMedium = document.getElementById('bulk-medium');
+            const boundarySensor = document.getElementById('boundary-sensor');
+            
+            // تأثير الليزر
+            laserBeam.style.transform = 'scaleX(1.2)';
+            laserBeam.style.boxShadow = '0 0 30px rgba(255, 0, 0, 0.8)';
+            
+            // تأثير التشتيت
+            bulkMedium.style.transform = 'scale(1.05)';
+            bulkMedium.style.boxShadow = '0 0 40px rgba(0, 100, 255, 0.6)';
+            
+            // تأثير المستشعر
+            boundarySensor.style.transform = 'scale(1.1)';
+            boundarySensor.style.boxShadow = '0 0 30px rgba(46, 204, 113, 0.6)';
+            boundarySensor.innerHTML = '<i class="fas fa-wifi fa-spin"></i> 📡 يجمع البيانات...';
+            
+            setTimeout(() => {
+                // إعادة التأثيرات
+                laserBeam.style.transform = 'scaleX(1)';
+                laserBeam.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.5)';
+                bulkMedium.style.transform = 'scale(1)';
+                bulkMedium.style.boxShadow = '0 0 20px rgba(0, 100, 255, 0.3)';
+                boundarySensor.style.transform = 'scale(1)';
+                boundarySensor.style.boxShadow = '0 0 20px rgba(46, 204, 113, 0.3)';
+                boundarySensor.innerHTML = '<i class="fas fa-wifi"></i> ✅ اكتمل الجمع';
+                
+            }, 2000);
+        }
+
+        // حساب النتائج
+        function calculateResults() {
+            const laserPower = parseInt(document.getElementById('laser-power').value);
+            const entropy = parseInt(document.getElementById('medium-entropy').value);
+            const scrambleTime = parseInt(document.getElementById('scramble-time').value);
+            const noise = parseInt(document.getElementById('noise-level').value);
+            
+            // حساب النتائج بناءً على معادلات البحث
+            const bulkVisibility = 4.2 * Math.exp(-entropy/100 * 2) * (1 - noise/100 * 0.3);
+            const boundaryCorrelation = 0.98 * Math.exp(-noise/100 * 0.8) * (1 + entropy/100 * 0.1);
+            const recoveryFidelity = 99.1 * Math.exp(-noise/100 * 0.4 - entropy/100 * 0.3);
+            const lyapunovExponent = 0.42 * (entropy/100) * (scrambleTime/500);
+            
+            // تخزين النتائج
+            experimentResults = {
+                laserPower,
+                entropy,
+                scrambleTime,
+                noise,
+                bulkVisibility,
+                boundaryCorrelation,
+                recoveryFidelity,
+                lyapunovExponent,
+                timestamp: new Date().toISOString()
+            };
+            
+            // تحديث الواجهة
             updateResultsDisplay();
+            
+            // تحديث البيانات في تيار البيانات
+            dataStreamContent.innerHTML = `
+                ✅ اكتملت التجربة<br>
+                📊 النتائج: رؤية ${bulkVisibility.toFixed(1)}% | ارتباط ${boundaryCorrelation.toFixed(2)} | دقة ${recoveryFidelity.toFixed(1)}%
+            `;
+            
+            showNotification(`اكتملت التجربة بنجاح! الدقة: ${recoveryFidelity.toFixed(1)}%`);
         }
-        
-        function parseKey(keyString) {
-            return keyString.replace(/[\[\]]/g, '')
-                           .split(',')
-                           .map(x => parseInt(x.trim()) || 0);
-        }
-        
+
+        // تحديث عرض النتائج
         function updateResultsDisplay() {
-            if (!encryptionResults) return;
+            if (!experimentResults) return;
             
-            originalKeyElement.textContent = '[' + encryptionResults.key.join(', ') + ']';
-            keyLengthElement.textContent = `${encryptionResults.key.length} بت`;
-            
-            bulkStateElement.textContent = formatVector(encryptionResults.scrambledBulk, 8);
-            bulkSizeElement.textContent = `${encryptionResults.scrambledBulk.length} عنصر`;
-            
-            boundarySignatureElement.textContent = 
-                `القاعدة: ${encryptionResults.boundarySignature.norm.toFixed(4)}\n` +
-                `الإنتروبيا: ${encryptionResults.boundarySignature.entropy.toFixed(4)}\n` +
-                `البصمة: ${encryptionResults.boundarySignature.signature.toFixed(4)}`;
-            
-            signatureValueElement.textContent = encryptionResults.boundarySignature.signature.toFixed(2);
-            
-            encryptionStrengthElement.textContent = 
-                `الشدة: ${encryptionResults.intensity}\n` +
-                `البعد: ${encryptionResults.dimension}\n` +
-                `التماثل: ${(100 - encryptionResults.encryptionStrength).toFixed(1)}%`;
-            
-            strengthValueElement.textContent = `${encryptionResults.encryptionStrength.toFixed(1)}%`;
+            document.getElementById('bulk-visibility').textContent = 
+                experimentResults.bulkVisibility.toFixed(1);
+            document.getElementById('boundary-correlation').textContent = 
+                experimentResults.boundaryCorrelation.toFixed(2);
+            document.getElementById('recovery-fidelity').textContent = 
+                experimentResults.recoveryFidelity.toFixed(1);
+            document.getElementById('lyapunov-exponent').textContent = 
+                experimentResults.lyapunovExponent.toFixed(2);
         }
-        
-        function formatVector(vector, maxItems) {
-            if (vector.length <= maxItems) {
-                return '[' + vector.map(x => x.toFixed(2)).join(', ') + ']';
-            } else {
-                let first = vector.slice(0, 3).map(x => x.toFixed(2)).join(', ');
-                let last = vector.slice(-3).map(x => x.toFixed(2)).join(', ');
-                return `[${first}, ..., ${last}]`;
+
+        // تشغيل التجربة
+        function runExperiment() {
+            showLoading('جاري تشغيل التجربة...');
+            
+            setTimeout(() => {
+                simulateExperimentSteps();
+                
+                setTimeout(() => {
+                    calculateResults();
+                    hideLoading();
+                }, 2500);
+            }, 1000);
+        }
+
+        // تحليل النتائج بالذكاء الاصطناعي
+        async function analyzeResults() {
+            if (!apiKey) {
+                showNotification('الرجاء إدخال مفتاح OpenRouter API أولاً');
+                return;
+            }
+            
+            if (!experimentResults) {
+                showNotification('الرجاء تشغيل تجربة أولاً');
+                return;
+            }
+            
+            const prompt = `أنت محلل مختبر OBD متخصص. قم بتحليل النتائج التالية:
+
+معاملات التجربة:
+- قوة الليزر: ${experimentResults.laserPower} ميجاوات
+- إنتروبيا الوسط: ${experimentResults.entropy}%
+- زمن التشتيت: ${experimentResults.scrambleTime} ملي ثانية
+- مستوى الضوضاء: ${experimentResults.noise} ديسيبل
+
+النتائج:
+- رؤية الداخل (Bulk Visibility): ${experimentResults.bulkVisibility.toFixed(2)}%
+- ارتباط الحدود (Boundary Correlation): ${experimentResults.boundaryCorrelation.toFixed(3)}
+- دقة الاسترداد (Recovery Fidelity): ${experimentResults.recoveryFidelity.toFixed(2)}%
+- أس ليابانوف (Lyapunov Exponent): ${experimentResults.lyapunovExponent.toFixed(3)}
+
+حلل هذه النتاج من حيث:
+1. فعالية عملية "الموت العملي" للداخل
+2. جودة هجرة المعلومات إلى الحدود
+3. تأثير الضوضاء على الأداء
+4. مقارنة مع النتائج المثلى في البحث الأصلي
+5. توصيات لتحسين التجربة
+
+أجب باللغة العربية وبأسلوب علمي واضح.`;
+
+            askAI(prompt);
+        }
+
+        // توليد تقرير مفصل
+        async function generateReport() {
+            if (!apiKey) {
+                showNotification('الرجاء إدخال مفتاح OpenRouter API أولاً');
+                return;
+            }
+            
+            if (!experimentResults) {
+                showNotification('الرجاء تشغيل تجربة أولاً');
+                return;
+            }
+            
+            const prompt = `أنت مساعد كتابة تقارير مختبر OBD. قم بكتابة تقرير علمي مفصل يحتوي على:
+
+1. معلومات التجربة:
+   - التاريخ والوقت: ${new Date(experimentResults.timestamp).toLocaleString('ar-SA')}
+   - الباحث المشرف: Ammar Nasir Hussein al-mantafji
+   - نوع التجربة: OBD - Observable Boundary Dynamics
+
+2. المعاملات التجريبية:
+   - قوة الليزر: ${experimentResults.laserPower} ميجاوات
+   - إنتروبيا وسط التشتيت: ${experimentResults.entropy}%
+   - مدة التشتيت: ${experimentResults.scrambleTime} ملي ثانية
+   - مستوى ضوضاء المحيط: ${experimentResults.noise} ديسيبل
+
+3. النتائج القياسية:
+   - رؤية الداخل: ${experimentResults.bulkVisibility.toFixed(2)}%
+   - ارتباط الحدود: ${experimentResults.boundaryCorrelation.toFixed(3)}
+   - دقة استرداد المعلومات: ${experimentResults.recoveryFidelity.toFixed(2)}%
+   - أس ليابانوف: ${experimentResults.lyapunovExponent.toFixed(3)}
+
+4. التحليل العلمي:
+   - تفسير ظاهرة "الموت العملي" للداخل
+   - كفاءة هجرة المعلومات إلى الحدود
+   - تأثير العوامل المختلفة على الأس ليابانوف
+   - مقارنة مع النتائج النظرية
+
+5. الاستنتاجات والتوصيات:
+   - تقييم نجاح التجربة
+   - نقاط القوة والضعف
+   - توصيات للتجارب المستقبلية
+   - التطبيقات المحتملة
+
+6. المراجع العلمية:
+   - ذكر البحث الأصلي OBD_New29_1_2026.pdf
+   - المراجع ذات الصلة
+
+أكتب التقرير باللغة العربية وبصيغة علمية احترافية مع عناوين فرعية مناسبة.`;
+
+            showLoading('جاري توليد التقرير...');
+            
+            try {
+                const response = await callOpenRouterAPI(prompt);
+                
+                // فتح التقرير في نافذة جديدة
+                const reportWindow = window.open('', '_blank');
+                reportWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html dir="rtl">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>تقرير مختبر OBD</title>
+                        <style>
+                            body { 
+                                font-family: 'Arial', sans-serif; 
+                                padding: 40px; 
+                                line-height: 1.8;
+                                background: #f5f5f5;
+                                color: #333;
+                            }
+                            .header { 
+                                background: linear-gradient(135deg, #0066ff, #0044cc);
+                                color: white;
+                                padding: 30px;
+                                border-radius: 10px;
+                                margin-bottom: 30px;
+                                text-align: center;
+                            }
+                            h1 { color: white; margin-bottom: 10px; }
+                            h2 { color: #0066ff; margin-top: 30px; border-bottom: 2px solid #0066ff; padding-bottom: 10px; }
+                            h3 { color: #00a8ff; }
+                            .results-grid {
+                                display: grid;
+                                grid-template-columns: repeat(2, 1fr);
+                                gap: 20px;
+                                margin: 20px 0;
+                            }
+                            .result-card {
+                                background: white;
+                                padding: 20px;
+                                border-radius: 8px;
+                                border-left: 5px solid #00a8ff;
+                                box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+                            }
+                            .parameter-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin: 20px 0;
+                                background: white;
+                                border-radius: 8px;
+                                overflow: hidden;
+                                box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+                            }
+                            .parameter-table th {
+                                background: #0066ff;
+                                color: white;
+                                padding: 15px;
+                                text-align: right;
+                            }
+                            .parameter-table td {
+                                padding: 12px 15px;
+                                border-bottom: 1px solid #eee;
+                            }
+                            .footer {
+                                margin-top: 40px;
+                                padding-top: 20px;
+                                border-top: 2px solid #0066ff;
+                                color: #666;
+                                text-align: center;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>تقرير مختبر OBD التجريبي</h1>
+                            <p>تجربة Observable Boundary Dynamics</p>
+                            <p style="opacity: 0.9;">الباحث المشرف: Ammar Nasir Hussein al-mantafji - ${new Date().toLocaleDateString('ar-SA')}</p>
+                        </div>
+                        
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <h3>👁️ رؤية الداخل</h3>
+                                <p style="font-size: 2rem; color: #0066ff; font-weight: bold;">
+                                    ${experimentResults.bulkVisibility.toFixed(2)}%
+                                </p>
+                            </div>
+                            <div class="result-card">
+                                <h3>🔗 ارتباط الحدود</h3>
+                                <p style="font-size: 2rem; color: #00a8ff; font-weight: bold;">
+                                    ${experimentResults.boundaryCorrelation.toFixed(3)}
+                                </p>
+                            </div>
+                            <div class="result-card">
+                                <h3>🎯 دقة الاسترداد</h3>
+                                <p style="font-size: 2rem; color: #1dd1a1; font-weight: bold;">
+                                    ${experimentResults.recoveryFidelity.toFixed(2)}%
+                                </p>
+                            </div>
+                            <div class="result-card">
+                                <h3>⚡ أس ليابانوف</h3>
+                                <p style="font-size: 2rem; color: #9b59b6; font-weight: bold;">
+                                    ${experimentResults.lyapunovExponent.toFixed(3)}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <table class="parameter-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>القيمة</th>
+                                    <th>الوحدة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>قوة الليزر</td>
+                                    <td>${experimentResults.laserPower}</td>
+                                    <td>ميجاوات</td>
+                                </tr>
+                                <tr>
+                                    <td>إنتروبيا الوسط</td>
+                                    <td>${experimentResults.entropy}</td>
+                                    <td>%</td>
+                                </tr>
+                                <tr>
+                                    <td>زمن التشتيت</td>
+                                    <td>${experimentResults.scrambleTime}</td>
+                                    <td>ملي ثانية</td>
+                                </tr>
+                                <tr>
+                                    <td>مستوى الضوضاء</td>
+                                    <td>${experimentResults.noise}</td>
+                                    <td>ديسيبل</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div>
+                            ${response.replace(/\n/g, '<br>').replace(/## (.*?):/g, '<h2>$1</h2>').replace(/### (.*?):/g, '<h3>$1</h3>')}
+                        </div>
+                        
+                        <div class="footer">
+                            <p>© 2026 مختبر OBD التجريبي - نظام بحثي تحت إشراف الباحث Ammar Nasir Hussein al-mantafji</p>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                reportWindow.document.close();
+                
+                hideLoading();
+                showNotification('تم إنشاء التقرير بنجاح!');
+                
+            } catch (error) {
+                hideLoading();
+                showNotification(`❌ خطأ: ${error.message}`);
             }
         }
-        
-        // تفاعل مع OpenRouter AI
-        async function callOpenRouterAPI(messages) {
-            if (!currentApiKey) {
-                throw new Error('الرجاء إدخال مفتاح OpenRouter API');
+
+        // إعادة تعيين التجربة
+        function resetExperiment() {
+            // إعادة تعيين المنزلقات
+            document.getElementById('laser-power').value = 50;
+            document.getElementById('medium-entropy').value = 75;
+            document.getElementById('scramble-time').value = 500;
+            document.getElementById('noise-level').value = 25;
+            
+            // تحديث العروض
+            document.getElementById('laser-power-value').textContent = '50';
+            document.getElementById('entropy-value').textContent = '75';
+            document.getElementById('time-value').textContent = '500';
+            document.getElementById('noise-value').textContent = '25';
+            
+            // تحديث التصور المرئي
+            updateVisualization();
+            
+            // إعادة تعيين النتائج
+            document.getElementById('bulk-visibility').textContent = '0.0';
+            document.getElementById('boundary-correlation').textContent = '0.00';
+            document.getElementById('recovery-fidelity').textContent = '0.0';
+            document.getElementById('lyapunov-exponent').textContent = '0.00';
+            
+            // إعادة تعيين البيانات
+            dataStreamContent.textContent = 'جاري انتظار البيانات...';
+            experimentResults = null;
+            
+            // إعادة تعيين الخطوات
+            updateExperimentStep(1);
+            
+            showNotification('تم إعادة تعيين التجربة بنجاح');
+        }
+
+        // التواصل مع OpenRouter API
+        async function callOpenRouterAPI(prompt) {
+            if (!apiKey) {
+                throw new Error('مفتاح API غير موجود');
             }
             
             try {
                 const response = await axios.post(
                     'https://openrouter.ai/api/v1/chat/completions',
                     {
-                        model: currentModel,
-                        messages: messages,
+                        model: aiModel,
+                        messages: [
+                            {
+                                role: "system",
+                                content: `أنت مساعد مختبر OBD متخصص في الفيزياء الكمومية والتشفير الهولوغرافي.
+أنت تساعد الباحث Ammar Nasir Hussein al-mantafji في تحليل نتائج تجارب Observable Boundary Dynamics.
+أجب دائماً باللغة العربية وبأسلوب علمي دقيق.
+استخدم المعادلات والمصطلحات الفنية المناسبة.`
+                            },
+                            {
+                                role: "user",
+                                content: prompt
+                            }
+                        ],
                         temperature: 0.7,
-                        max_tokens: 2000,
-                        stream: false
+                        max_tokens: 3000
                     },
                     {
                         headers: {
-                            'Authorization': `Bearer ${currentApiKey}`,
+                            'Authorization': `Bearer ${apiKey}`,
                             'Content-Type': 'application/json',
                             'HTTP-Referer': window.location.origin,
-                            'X-Title': 'Holographic Encryption System'
+                            'X-Title': 'OBD Laboratory AI Assistant'
                         }
                     }
                 );
@@ -1167,297 +1616,146 @@
                 throw new Error(`فشل الاتصال: ${error.response?.data?.error?.message || error.message}`);
             }
         }
-        
-        // تحليل النتائج بالذكاء الاصطناعي
-        async function analyzeWithAI() {
-            if (!currentApiKey) {
-                alert('الرجاء إدخال مفتاح OpenRouter API أولاً');
-                return;
-            }
-            
-            if (!encryptionResults) {
-                alert('الرجاء تشغيل التشفير أولاً');
-                return;
-            }
-            
-            showLoading();
-            addUserMessage("تحليل نتائج التشفير الحالية");
-            
-            const prompt = `أنت خبير في التشفير الهولوغرافي والفيزياء الكمومية. 
-            
-تحليل نتائج التشفير:
-1. المفتاح الأصلي: ${encryptionResults.key.join(', ')}
-2. طول المفتاح: ${encryptionResults.key.length} بت
-3. شدة التشتيت: ${encryptionResults.intensity}/10
-4. حجم البعد: ${encryptionResults.dimension}
-5. بصمة الحدود: ${encryptionResults.boundarySignature.signature.toFixed(4)}
-6. قوة التشفير: ${encryptionResults.encryptionStrength.toFixed(1)}%
 
-قم بتحليل هذه النتاج من حيث:
-1. جودة التشفير والأمان
-2. مدى تعقيد النظام
-3. التوصيات لتحسين النظام
-4. التطبيقات المحتملة
-
-أجب باللغة العربية وبأسلوب علمي واضح.`;
-
-            try {
-                const aiResponse = await callOpenRouterAPI([
-                    {
-                        role: "system",
-                        content: "أنت مساعد متخصص في التشفير الهولوغرافي والفيزياء الكمومية. أجب باللغة العربية دائماً."
-                    },
-                    {
-                        role: "user",
-                        content: prompt
-                    }
-                ]);
-                
-                addAIMessage(aiResponse);
-                hideLoading();
-            } catch (error) {
-                addAIMessage(`❌ خطأ: ${error.message}`);
-                hideLoading();
-            }
-        }
-        
-        // توليد تقرير متقدم
-        async function generateReport() {
-            if (!currentApiKey) {
-                alert('الرجاء إدخال مفتاح OpenRouter API أولاً');
-                return;
-            }
-            
-            if (!encryptionResults) {
-                alert('الرجاء تشغيل التشفير أولاً');
-                return;
-            }
-            
-            showLoading();
-            addUserMessage("توليد تقرير متقدم عن النظام");
-            
-            const prompt = `أنت خبير في التشفير الهولوغرافي. قم بتوليد تقرير متقدم يحتوي على:
-
-1. **ملخص تنفيذي**: نظرة عامة على النظام ونتائج التشفير
-2. **التحليل الفني**: 
-   - تحليل خوارزمية التشتيت
-   - تقييم أمن النظام
-   - تحليل الإحصائيات (الإنتروبيا، القاعدة، البصمة)
-3. **تقييم الأمان**:
-   - نقاط القوة
-   - نقاط الضعف المحتملة
-   - مقاومة الهجمات
-4. **التوصيات**:
-   - تحسينات مقترحة
-   - معايير الأمان المقترحة
-5. **الخاتمة**: ملاحظات ختامية وتوقعات مستقبلية
-
-استخدم البيانات التالية:
-- طول المفتاح: ${encryptionResults.key.length} بت
-- شدة التشتيت: ${encryptionResults.intensity}
-- حجم البعد: ${encryptionResults.dimension}
-- بصمة الحدود: ${encryptionResults.boundarySignature.signature.toFixed(4)}
-- الإنتروبيا: ${encryptionResults.boundarySignature.entropy.toFixed(4)}
-- قوة التشفير: ${encryptionResults.encryptionStrength.toFixed(1)}%
-
-أجب باللغة العربية وبصيغة تقرير احترافي مع عناوين فرعية.`;
-
-            try {
-                const aiResponse = await callOpenRouterAPI([
-                    {
-                        role: "system",
-                        content: "أنت مساعد متخصص في كتابة التقارير الفنية عن أنظمة التشفير. أجب باللغة العربية."
-                    },
-                    {
-                        role: "user",
-                        content: prompt
-                    }
-                ]);
-                
-                // فتح التقرير في نافذة جديدة
-                const reportWindow = window.open('', '_blank');
-                reportWindow.document.write(`
-                    <!DOCTYPE html>
-                    <html dir="rtl">
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>تقرير التشفير الهولوغرافي</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; padding: 40px; line-height: 1.8; }
-                            h1 { color: #0c2461; border-bottom: 2px solid #4bcffa; padding-bottom: 10px; }
-                            h2 { color: #1e3799; margin-top: 30px; }
-                            h3 { color: #4bcffa; }
-                            .header { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
-                            .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
-                            .stat-card { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #4bcffa; }
-                            pre { background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto; }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="header">
-                            <h1>تقرير نظام التشفير الهولوغرافي</h1>
-                            <p><strong>الباحث:</strong> Ammar Nasir Hussein al-mantafji</p>
-                            <p><strong>التاريخ:</strong> ${new Date().toLocaleDateString('ar-SA')}</p>
-                        </div>
-                        <div class="stats">
-                            <div class="stat-card"><strong>طول المفتاح:</strong> ${encryptionResults.key.length} بت</div>
-                            <div class="stat-card"><strong>قوة التشفير:</strong> ${encryptionResults.encryptionStrength.toFixed(1)}%</div>
-                            <div class="stat-card"><strong>إنتروبيا النظام:</strong> ${encryptionResults.boundarySignature.entropy.toFixed(4)}</div>
-                            <div class="stat-card"><strong>بصمة الحدود:</strong> ${encryptionResults.boundarySignature.signature.toFixed(4)}</div>
-                        </div>
-                        <div>${aiResponse.replace(/\n/g, '<br>').replace(/## (.*?):/g, '<h2>$1</h2>').replace(/### (.*?):/g, '<h3>$1</h3>')}</div>
-                    </body>
-                    </html>
-                `);
-                reportWindow.document.close();
-                
-                hideLoading();
-            } catch (error) {
-                addAIMessage(`❌ خطأ في توليد التقرير: ${error.message}`);
-                hideLoading();
-            }
-        }
-        
-        // نظام المحادثة
-        async function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message) return;
-            
-            if (!currentApiKey) {
-                alert('الرجاء إدخال مفتاح OpenRouter API أولاً');
+        // طرح سؤال على الذكاء الاصطناعي
+        async function askAI(prompt) {
+            if (!apiKey) {
+                showNotification('الرجاء إدخال مفتاح OpenRouter API أولاً');
                 return;
             }
             
             // إضافة رسالة المستخدم
-            addUserMessage(message);
-            chatInput.value = '';
+            addUserMessage(prompt);
             
             // إضافة مؤشر الكتابة
-            const typingIndicator = document.createElement('div');
-            typingIndicator.className = 'typing-indicator';
-            typingIndicator.innerHTML = `
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <span style="margin-right: 10px;">جاري الكتابة...</span>
-            `;
-            chatMessages.appendChild(typingIndicator);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            
-            // إعداد السياق
-            let context = [
-                {
-                    role: "system",
-                    content: `أنت مساعد متخصص في التشفير الهولوغرافي والفيزياء الكمومية. 
-أنت تساعد الباحث Ammar Nasir Hussein al-mantafji في تطوير نظام تشفير متقدم.
-استخدم المصطلحات العلمية المناسبة وأجب باللغة العربية.
-                    
-المعلومات الحالية عن النظام:
-${encryptionResults ? `
-- طول المفتاح: ${encryptionResults.key.length} بت
-- شدة التشتيت: ${encryptionResults.intensity}/10
-- قوة التشفير: ${encryptionResults.encryptionStrength.toFixed(1)}%
-- بصمة الحدود: ${encryptionResults.boundarySignature.signature.toFixed(4)}
-` : 'لم يتم تشغيل التشفير بعد.'}`
-                }
-            ];
-            
-            // إضافة سجل المحادثة
-            chatHistory.forEach(msg => {
-                context.push({
-                    role: msg.role,
-                    content: msg.content
-                });
-            });
-            
-            context.push({
-                role: "user",
-                content: message
-            });
+            addTypingIndicator();
             
             try {
-                const aiResponse = await callOpenRouterAPI(context);
+                const response = await callOpenRouterAPI(prompt);
                 
                 // إزالة مؤشر الكتابة
-                chatMessages.removeChild(typingIndicator);
+                removeTypingIndicator();
                 
                 // إضافة رد الذكاء الاصطناعي
-                addAIMessage(aiResponse);
+                addAIMessage(response);
                 
                 // تحديث سجل المحادثة
-                chatHistory.push({ role: "user", content: message });
-                chatHistory.push({ role: "assistant", content: aiResponse });
+                chatHistory.push({ role: "user", content: prompt });
+                chatHistory.push({ role: "assistant", content: response });
                 
                 // الحفاظ على حجم معقول للسجل
-                if (chatHistory.length > 20) {
-                    chatHistory = chatHistory.slice(-20);
+                if (chatHistory.length > 10) {
+                    chatHistory = chatHistory.slice(-10);
                 }
                 
             } catch (error) {
-                chatMessages.removeChild(typingIndicator);
+                removeTypingIndicator();
                 addAIMessage(`❌ خطأ: ${error.message}`);
+                showNotification('فشل الاتصال بالذكاء الاصطناعي');
             }
         }
-        
+
+        // إضافة رسالة المستخدم
         function addUserMessage(content) {
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'message user';
+            messageDiv.className = 'analysis-message message-user';
             messageDiv.innerHTML = `
-                <div class="message-header">
+                <div class="message-header user-message-header">
                     <i class="fas fa-user"></i>
                     أنت
                 </div>
                 <div class="message-content">${content}</div>
             `;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            aiAnalysisContent.appendChild(messageDiv);
+            aiAnalysisContent.scrollTop = aiAnalysisContent.scrollHeight;
         }
-        
+
+        // إضافة رسالة الذكاء الاصطناعي
         function addAIMessage(content) {
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'message ai';
+            messageDiv.className = 'analysis-message message-ai';
             messageDiv.innerHTML = `
-                <div class="message-header">
+                <div class="message-header ai-message-header">
                     <i class="fas fa-robot"></i>
-                    مساعد الذكاء الاصطناعي
+                    محلل OBD الذكي
                 </div>
                 <div class="message-content">${content}</div>
             `;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            aiAnalysisContent.appendChild(messageDiv);
+            aiAnalysisContent.scrollTop = aiAnalysisContent.scrollHeight;
         }
-        
-        // وظائف مساعدة
-        function showLoading() {
-            loadingOverlay.classList.add('active');
+
+        // إضافة مؤشر الكتابة
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <span>جاري التحليل...</span>
+            `;
+            aiAnalysisContent.appendChild(typingDiv);
+            aiAnalysisContent.scrollTop = aiAnalysisContent.scrollHeight;
         }
-        
-        function hideLoading() {
-            loadingOverlay.classList.remove('active');
-        }
-        
-        function animateResults() {
-            const cards = document.querySelectorAll('.result-card');
-            cards.forEach((card, index) => {
-                card.style.transform = 'translateY(-10px) scale(1.02)';
-                card.style.boxShadow = '0 15px 40px rgba(0, 168, 255, 0.3)';
-                
-                setTimeout(() => {
-                    card.style.transform = 'translateY(-5px) scale(1.01)';
-                    card.style.boxShadow = '0 10px 30px rgba(0, 168, 255, 0.2)';
-                }, 300 + index * 100);
-            });
-        }
-        
-        // تحديث المفتاح بشكل دوري
-        setInterval(() => {
-            if (Math.random() > 0.7) {
-                generateRandomKey();
-                if (encryptionResults) {
-                    runScrambling();
-                }
+
+        // إزالة مؤشر الكتابة
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
             }
-        }, 15000);
+        }
+
+        // إظهار الإشعارات
+        function showNotification(message) {
+            // إنشاء عنصر الإشعار
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #0066ff, #0044cc);
+                color: white;
+                padding: 15px 30px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0, 102, 255, 0.3);
+                z-index: 1000;
+                font-weight: 600;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // إزالة الإشعار بعد 3 ثوانٍ
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // إضافة أنماط CSS للتحريك
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { top: -100px; opacity: 0; }
+                to { top: 20px; opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { top: 20px; opacity: 1; }
+                to { top: -100px; opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // تحديث تيار البيانات بشكل دوري
+        setInterval(updateDataStream, 2000);
+        
+        // تحديث التصور المرئي بشكل دوري
+        setInterval(updateVisualization, 1000);
     </script>
 </body>
 </html>
