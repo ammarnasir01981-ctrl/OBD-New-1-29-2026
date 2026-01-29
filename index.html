@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام التشفير الهولوغرافي المتقدم - الذكاء الاصطناعي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c2e 0%, #1a1a3e 50%, #0c0c2e 100%);
+            color: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(75, 207, 250, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(155, 89, 182, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(41, 128, 185, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+            animation: backgroundPulse 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes backgroundPulse {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* شعار الباحث المتقدم */
+        .researcher-header {
+            background: linear-gradient(135deg, 
+                rgba(10, 15, 40, 0.97) 0%, 
+                rgba(20, 30, 70, 0.97) 50%, 
+                rgba(10, 15, 40, 0.97) 100%);
+            border-radius: 25px;
+            padding: 35px 50px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(75, 207, 250, 0.4);
+            box-shadow: 
+                0 15px 50px rgba(0, 0, 0, 0.6),
+                inset 0 0 60px rgba(75, 207, 250, 0.15),
+                0 0 100px rgba(75, 207, 250, 0.1);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .researcher-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(75, 207, 250, 0.1) 50%, transparent 70%);
+            animation: shine 8s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .researcher-name {
+            font-size: 3.2rem;
+            background: linear-gradient(135deg, 
+                #4bcffa 0%, 
+                #0fbcf9 25%, 
+                #00a8ff 50%, 
+                #0097e6 75%, 
+                #005a87 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 15px;
+            text-shadow: 
+                0 2px 10px rgba(75, 207, 250, 0.3),
+                0 4px 20px rgba(75, 207, 250, 0.2);
+            letter-spacing: 2.5px;
+            font-weight: 900;
+            position: relative;
+            z-index: 2;
+            animation: textGlow 4s ease-in-out infinite alternate;
+            text-transform: uppercase;
+        }
+
+        @keyframes textGlow {
+            0% {
+                filter: drop-shadow(0 0 5px rgba(75, 207, 250, 0.3))
+                        drop-shadow(0 0 10px rgba(75, 207, 250, 0.2));
+            }
+            100% {
+                filter: drop-shadow(0 0 10px rgba(75, 207, 250, 0.5))
+                        drop-shadow(0 0 20px rgba(75, 207, 250, 0.3))
+                        drop-shadow(0 0 30px rgba(75, 207, 250, 0.1));
+            }
+        }
+
+        .researcher-title {
+            font-size: 1.5rem;
+            color: #a0e7ff;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 10px rgba(160, 231, 255, 0.3);
+        }
+
+        .ai-badge {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: linear-gradient(135deg, #ff9ff3, #f368e0);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: white;
+            font-weight: 600;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(243, 104, 224, 0.3);
+            z-index: 3;
+            animation: badgePulse 3s infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .ai-status {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(46, 204, 113, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            z-index: 3;
+        }
+
+        .ai-status-dot {
+            width: 8px;
+            height: 8px;
+            background: #2ecc71;
+            border-radius: 50%;
+            animation: statusPulse 2s infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .ai-status-text {
+            color: #2ecc71;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 350px 1fr 400px;
+            gap: 25px;
+            margin-bottom: 40px;
+            min-height: 800px;
+        }
+
+        @media (max-width: 1400px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+        }
+
+        .panel {
+            background: rgba(20, 25, 60, 0.85);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(75, 207, 250, 0.25);
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .panel-title {
+            font-size: 1.4rem;
+            color: #4bcffa;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(75, 207, 250, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .panel-title i {
+            font-size: 1.3rem;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #c7ecee;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .api-key-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(75, 207, 250, 0.3);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: monospace;
+        }
+
+        .api-key-input:focus {
+            outline: none;
+            border-color: #4bcffa;
+            box-shadow: 0 0 20px rgba(75, 207, 250, 0.3);
+        }
+
+        .key-display {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #7bd5ff;
+            margin-top: 10px;
+            border: 1px dashed rgba(75, 207, 250, 0.3);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .slider-value {
+            min-width: 60px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(75, 207, 250, 0.2), rgba(0, 168, 255, 0.2));
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            color: #4bcffa;
+            border: 1px solid rgba(75, 207, 250, 0.3);
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background: linear-gradient(90deg, rgba(75, 207, 250, 0.3), rgba(0, 168, 255, 0.3));
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #4bcffa, #00a8ff);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(75, 207, 250, 0.7);
+            border: 2px solid white;
+        }
+
+        .button-group {
+            display: grid;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4bcffa 0%, #0fbcf9 50%, #00a8ff 100%);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 20px rgba(0, 168, 255, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 168, 255, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, #ff9ff3 0%, #f368e0 100%);
+            box-shadow: 0 5px 20px rgba(243, 104, 224, 0.2);
+        }
+
+        button.success {
+            background: linear-gradient(135deg, #1dd1a1 0%, #10ac84 100%);
+            box-shadow: 0 5px 20px rgba(29, 209, 161, 0.2);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-card {
+            background: rgba(10, 15, 40, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(75, 207, 250, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4bcffa, #00a8ff);
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(75, 207, 250, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 168, 255, 0.2);
+        }
+
+        .result-title {
+            color: #4bcffa;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-content {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: #7bd5ff;
+            font-size: 0.9rem;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid rgba(75, 207, 250, 0.1);
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4bcffa;
+            text-align: center;
+            padding: 10px;
+            text-shadow: 0 2px 10px rgba(75, 207, 250, 0.3);
+        }
+
+        /* لوحة الذكاء الاصطناعي */
+        .ai-chat {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(75, 207, 250, 0.2);
+            min-height: 300px;
+            max-height: 500px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            max-width: 85%;
+            animation: messageAppear 0.3s ease;
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, rgba(75, 207, 250, 0.2), rgba(0, 168, 255, 0.2));
+            margin-left: auto;
+            margin-right: 0;
+            border: 1px solid rgba(75, 207, 250, 0.3);
+        }
+
+        .message.ai {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.2), rgba(142, 68, 173, 0.2));
+            margin-right: auto;
+            margin-left: 0;
+            border: 1px solid rgba(155, 89, 182, 0.3);
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #4bcffa;
+        }
+
+        .message.ai .message-header {
+            color: #9b59b6;
+        }
+
+        .message-content {
+            line-height: 1.5;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 15px;
+            background: rgba(155, 89, 182, 0.2);
+            border-radius: 10px;
+            width: fit-content;
+            border: 1px solid rgba(155, 89, 182, 0.3);
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #9b59b6;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(75, 207, 250, 0.3);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #4bcffa;
+            box-shadow: 0 0 20px rgba(75, 207, 250, 0.3);
+        }
+
+        .ai-suggestions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .suggestion-btn {
+            background: rgba(155, 89, 182, 0.2);
+            border: 1px solid rgba(155, 89, 182, 0.3);
+            color: #d2b4de;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .suggestion-btn:hover {
+            background: rgba(155, 89, 182, 0.3);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #c7ecee;
+            font-size: 0.9rem;
+        }
+
+        .model-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .model-select {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(75, 207, 250, 0.3);
+            border-radius: 8px;
+            padding: 10px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 15, 40, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(75, 207, 250, 0.3);
+            border-top-color: #4bcffa;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .researcher-name {
+                font-size: 2rem;
+            }
+            
+            .researcher-title {
+                font-size: 1.2rem;
+            }
+            
+            .ai-suggestions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- شعار الباحث مع الذكاء الاصطناعي -->
+        <div class="researcher-header">
+            <div class="ai-badge">
+                <i class="fas fa-brain"></i> مدعوم بالذكاء الاصطناعي
+            </div>
+            <div class="ai-status">
+                <div class="ai-status-dot"></div>
+                <div class="ai-status-text">OpenRouter متصل</div>
+            </div>
+            <h1 class="researcher-name">Ammar Nasir Hussein al-mantafji</h1>
+            <p class="researcher-title">نظام التشفير الهولوغرافي المتقدم - الإصدار الذكي</p>
+        </div>
+
+        <div class="content-wrapper">
+            <!-- لوحة التحكم -->
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-sliders-h"></i> الإعدادات</h2>
+                
+                <div class="control-group">
+                    <label for="api-key"><i class="fas fa-key"></i> مفتاح OpenRouter API:</label>
+                    <input type="password" id="api-key" class="api-key-input" 
+                           placeholder="أدخل مفتاح OpenRouter API الخاص بك">
+                    <div style="margin-top: 10px; font-size: 0.8rem; color: #a0d2db;">
+                        <i class="fas fa-info-circle"></i>
+                        احصل على مفتاح مجاني من <a href="https://openrouter.ai" target="_blank" 
+                        style="color: #4bcffa;">OpenRouter.ai</a>
+                    </div>
+                </div>
+                
+                <div class="model-selector">
+                    <label for="ai-model"><i class="fas fa-robot"></i> النموذج:</label>
+                    <select id="ai-model" class="model-select">
+                        <option value="openai/gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="openai/gpt-4">GPT-4</option>
+                        <option value="anthropic/claude-3-haiku">Claude 3 Haiku</option>
+                        <option value="google/gemini-pro">Gemini Pro</option>
+                        <option value="meta-llama/llama-3-70b-instruct">Llama 3 70B</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="quantum-key"><i class="fas fa-lock"></i> المفتاح الكمومي:</label>
+                    <div class="key-display" id="quantum-key-display">
+                        [1, 0, 1, 1, 0, 1, 0, 1, 1, 0]
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label><i class="fas fa-random"></i> شدة التشتيت:</label>
+                    <div class="slider-container">
+                        <input type="range" id="scramble-intensity" min="1" max="10" value="5" step="1">
+                        <span class="slider-value" id="intensity-display">5</span>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label><i class="fas fa-expand-arrows-alt"></i> حجم البعد:</label>
+                    <div class="slider-container">
+                        <input type="range" id="dimension-size" min="2" max="20" value="5" step="1">
+                        <span class="slider-value" id="dimension-display">5</span>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button id="scramble-btn" class="success">
+                        <i class="fas fa-project-diagram"></i> تشفير هولوغرافي
+                    </button>
+                    <button id="analyze-ai-btn" class="secondary">
+                        <i class="fas fa-brain"></i> تحليل بالذكاء الاصطناعي
+                    </button>
+                    <button id="generate-report">
+                        <i class="fas fa-file-alt"></i> توليد تقرير
+                    </button>
+                </div>
+            </div>
+            
+            <!-- النتائج والتشغيل -->
+            <div class="panel">
+                <div class="loading-overlay" id="loading-overlay">
+                    <div class="spinner"></div>
+                    <div>جاري المعالجة...</div>
+                </div>
+                
+                <h2 class="panel-title"><i class="fas fa-chart-network"></i> نتائج التشفير</h2>
+                
+                <div class="results-grid">
+                    <div class="result-card">
+                        <h3 class="result-title"><i class="fas fa-key"></i> المفتاح الأصلي</h3>
+                        <div class="result-content" id="original-key">[1, 0, 1, 1, 0, 1, 0, 1, 1, 0]</div>
+                        <div class="result-value" id="key-length">10 بت</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3 class="result-title"><i class="fas fa-cube"></i> الحالة المشتتة</h3>
+                        <div class="result-content" id="bulk-state">لم يتم التشفير بعد</div>
+                        <div class="result-value" id="bulk-size">-</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3 class="result-title"><i class="fas fa-broadcast-tower"></i> بصمة الحدود</h3>
+                        <div class="result-content" id="boundary-signature">-</div>
+                        <div class="result-value" id="signature-value">0.00</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h3 class="result-title"><i class="fas fa-shield-alt"></i> قوة التشفير</h3>
+                        <div class="result-content" id="encryption-strength">-</div>
+                        <div class="result-value" id="strength-value">0%</div>
+                    </div>
+                </div>
+                
+                <div class="ai-suggestions">
+                    <div class="suggestion-btn" data-prompt="اشرح لي مبدأ الإسقاط الهولوغرافي">
+                        شرح المبدأ العلمي
+                    </div>
+                    <div class="suggestion-btn" data-prompt="كيف يمكن تطبيق هذا النظام في الواقع؟">
+                        التطبيقات العملية
+                    </div>
+                    <div class="suggestion-btn" data-prompt="ما هي نقاط القوة والضعف في هذا النوع من التشفير؟">
+                        التحليل النقدي
+                    </div>
+                    <div class="suggestion-btn" data-prompt="ما هي البدائل لهذا النظام؟">
+                        البدائل المقترحة
+                    </div>
+                </div>
+            </div>
+            
+            <!-- لوحة الذكاء الاصطناعي -->
+            <div class="panel ai-chat">
+                <h2 class="panel-title"><i class="fas fa-robot"></i> مساعد الذكاء الاصطناعي</h2>
+                
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message ai">
+                        <div class="message-header">
+                            <i class="fas fa-robot"></i>
+                            مساعد التشفير الهولوغرافي
+                        </div>
+                        <div class="message-content">
+                            مرحباً! أنا مساعد الذكاء الاصطناعي المتخصص في التشفير الهولوغرافي والفيزياء الكمومية. 
+                            يمكنني مساعدتك في:
+                            <br><br>
+                            • شرح المفاهيم العلمية المعقدة
+                            <br>
+                            • تحليل نتائج التشفير
+                            <br>
+                            • توليد تقارير متقدمة
+                            <br>
+                            • الإجابة على أسئلتك
+                            <br><br>
+                            أدخل مفتاح OpenRouter API لبدء المحادثة.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chat-input" 
+                           placeholder="اسأل عن أي شيء متعلق بالتشفير الهولوغرافي...">
+                    <button id="send-message">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2024 نظام التشفير الهولوغرافي المتقدم - الإصدار المدعوم بالذكاء الاصطناعي</p>
+            <p style="margin-top: 10px; color: #4bcffa;">
+                <i class="fas fa-exclamation-circle"></i>
+                هذا النظام يستخدم OpenRouter للوصول إلى نماذج الذكاء الاصطناعي المتقدمة
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // متغيرات النظام
+        let currentApiKey = '';
+        let currentModel = 'openai/gpt-3.5-turbo';
+        let chatHistory = [];
+        let encryptionResults = null;
+        
+        // عناصر DOM
+        const apiKeyInput = document.getElementById('api-key');
+        const modelSelect = document.getElementById('ai-model');
+        const intensitySlider = document.getElementById('scramble-intensity');
+        const intensityDisplay = document.getElementById('intensity-display');
+        const dimensionSlider = document.getElementById('dimension-size');
+        const dimensionDisplay = document.getElementById('dimension-display');
+        const scrambleBtn = document.getElementById('scramble-btn');
+        const analyzeAiBtn = document.getElementById('analyze-ai-btn');
+        const generateReportBtn = document.getElementById('generate-report');
+        const sendMessageBtn = document.getElementById('send-message');
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+        
+        // عناصر النتائج
+        const originalKeyElement = document.getElementById('original-key');
+        const keyLengthElement = document.getElementById('key-length');
+        const bulkStateElement = document.getElementById('bulk-state');
+        const bulkSizeElement = document.getElementById('bulk-size');
+        const boundarySignatureElement = document.getElementById('boundary-signature');
+        const signatureValueElement = document.getElementById('signature-value');
+        const encryptionStrengthElement = document.getElementById('encryption-strength');
+        const strengthValueElement = document.getElementById('strength-value');
+        const quantumKeyDisplay = document.getElementById('quantum-key-display');
+        
+        // تهيئة النظام
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedSettings();
+            updateDisplays();
+            generateRandomKey();
+            runInitialScrambling();
+            
+            // إضافة مستمعي الأحداث
+            intensitySlider.addEventListener('input', updateDisplays);
+            dimensionSlider.addEventListener('input', updateDisplays);
+            modelSelect.addEventListener('change', updateModel);
+            apiKeyInput.addEventListener('change', saveApiKey);
+            
+            scrambleBtn.addEventListener('click', runScrambling);
+            analyzeAiBtn.addEventListener('click', analyzeWithAI);
+            generateReportBtn.addEventListener('click', generateReport);
+            sendMessageBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
+            
+            suggestionButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const prompt = this.getAttribute('data-prompt');
+                    chatInput.value = prompt;
+                    sendMessage();
+                });
+            });
+        });
+        
+        // تحديث العروض
+        function updateDisplays() {
+            intensityDisplay.textContent = intensitySlider.value;
+            dimensionDisplay.textContent = dimensionSlider.value;
+        }
+        
+        function updateModel() {
+            currentModel = modelSelect.value;
+            localStorage.setItem('holographic_ai_model', currentModel);
+        }
+        
+        function saveApiKey() {
+            currentApiKey = apiKeyInput.value;
+            localStorage.setItem('holographic_api_key', currentApiKey);
+            updateAIStatus();
+        }
+        
+        function loadSavedSettings() {
+            const savedKey = localStorage.getItem('holographic_api_key');
+            const savedModel = localStorage.getItem('holographic_ai_model');
+            
+            if (savedKey) {
+                currentApiKey = savedKey;
+                apiKeyInput.value = savedKey;
+            }
+            
+            if (savedModel) {
+                currentModel = savedModel;
+                modelSelect.value = savedModel;
+            }
+            
+            updateAIStatus();
+        }
+        
+        function updateAIStatus() {
+            const statusText = currentApiKey ? 'OpenRouter متصل' : 'أدخل مفتاح API';
+            document.querySelector('.ai-status-text').textContent = statusText;
+            document.querySelector('.ai-status-dot').style.background = 
+                currentApiKey ? '#2ecc71' : '#e74c3c';
+        }
+        
+        // توليد مفتاح عشوائي
+        function generateRandomKey() {
+            const length = Math.floor(Math.random() * 8) + 6;
+            let key = [];
+            for (let i = 0; i < length; i++) {
+                key.push(Math.random() > 0.5 ? 1 : 0);
+            }
+            quantumKeyDisplay.textContent = '[' + key.join(', ') + ']';
+            return key;
+        }
+        
+        // خوارزمية التشفير الهولوغرافي
+        function holographicScramble(secretKey, intensity, dimension) {
+            const size = Math.max(secretKey.length, dimension);
+            
+            // إنشاء مصفوفة تشتيت
+            let scrambler = createScramblerMatrix(size, intensity);
+            
+            // توسيع المفتاح
+            let extendedKey = [...secretKey];
+            while (extendedKey.length < size) {
+                extendedKey.push(Math.random() > 0.5 ? 1 : 0);
+            }
+            
+            // تطبيق التشتيت
+            let scrambledBulk = applyScrambling(scrambler, extendedKey);
+            
+            // حساب بصمة الحدود
+            let boundarySignature = calculateSignature(scrambledBulk);
+            
+            // حساب قوة التشفير
+            let encryptionStrength = calculateStrength(scrambledBulk, extendedKey);
+            
+            return {
+                key: secretKey,
+                extendedKey: extendedKey,
+                scrambler: scrambler,
+                scrambledBulk: scrambledBulk,
+                boundarySignature: boundarySignature,
+                encryptionStrength: encryptionStrength,
+                intensity: intensity,
+                dimension: dimension
+            };
+        }
+        
+        function createScramblerMatrix(size, intensity) {
+            let matrix = [];
+            const factor = intensity / 5;
+            
+            for (let i = 0; i < size; i++) {
+                matrix[i] = [];
+                for (let j = 0; j < size; j++) {
+                    // إنشاء قيم معقدة مع بعض الأنماط
+                    let angle = (i * j) * Math.PI / size;
+                    matrix[i][j] = {
+                        real: (Math.cos(angle) + (Math.random() - 0.5) * factor) * intensity,
+                        imag: (Math.sin(angle) + (Math.random() - 0.5) * factor) * intensity
+                    };
+                }
+            }
+            
+            return matrix;
+        }
+        
+        function applyScrambling(matrix, vector) {
+            let result = [];
+            
+            for (let i = 0; i < matrix.length; i++) {
+                let real = 0;
+                let imag = 0;
+                
+                for (let j = 0; j < matrix[i].length; j++) {
+                    real += matrix[i][j].real * vector[j];
+                    imag += matrix[i][j].imag * vector[j];
+                }
+                
+                // تحويل إلى مقدار حقيقي
+                result.push(Math.sqrt(real * real + imag * imag));
+            }
+            
+            return result;
+        }
+        
+        function calculateSignature(vector) {
+            let norm = 0;
+            let entropy = 0;
+            let mean = 0;
+            
+            // حساب القاعدة
+            for (let val of vector) {
+                norm += val * val;
+            }
+            norm = Math.sqrt(norm);
+            
+            // حساب المتوسط
+            mean = vector.reduce((a, b) => a + b, 0) / vector.length;
+            
+            // حساب الإنتروبيا
+            let normalized = vector.map(x => x / norm);
+            for (let p of normalized) {
+                if (p > 0) {
+                    entropy -= p * Math.log2(p);
+                }
+            }
+            
+            // بصمة مركبة
+            let signature = norm * (1 + entropy / 10);
+            
+            return {
+                norm: norm,
+                entropy: entropy,
+                mean: mean,
+                signature: signature
+            };
+        }
+        
+        function calculateStrength(bulk, original) {
+            // قياس مدى اختلاف الناتج عن الأصل
+            let similarity = 0;
+            let maxVal = Math.max(...bulk);
+            
+            for (let i = 0; i < Math.min(bulk.length, original.length); i++) {
+                if (original[i] === 1) {
+                    similarity += bulk[i] / maxVal;
+                }
+            }
+            
+            similarity /= original.filter(x => x === 1).length || 1;
+            
+            // قوة التشفير عكسية للتماثل
+            let strength = (1 - similarity) * 100;
+            
+            return Math.max(0, Math.min(100, strength));
+        }
+        
+        // تشغيل التشفير
+        function runScrambling() {
+            showLoading();
+            
+            const key = parseKey(quantumKeyDisplay.textContent);
+            const intensity = parseInt(intensitySlider.value);
+            const dimension = parseInt(dimensionSlider.value);
+            
+            setTimeout(() => {
+                encryptionResults = holographicScramble(key, intensity, dimension);
+                
+                // تحديث الواجهة
+                updateResultsDisplay();
+                animateResults();
+                hideLoading();
+                
+                // إضافة رسالة AI تلقائية
+                addAIMessage("تمت عملية التشفير الهولوغرافي بنجاح! يمكنني الآن تحليل النتائج لك.");
+                
+            }, 800);
+        }
+        
+        function runInitialScrambling() {
+            const key = parseKey(quantumKeyDisplay.textContent);
+            encryptionResults = holographicScramble(key, 5, 5);
+            updateResultsDisplay();
+        }
+        
+        function parseKey(keyString) {
+            return keyString.replace(/[\[\]]/g, '')
+                           .split(',')
+                           .map(x => parseInt(x.trim()) || 0);
+        }
+        
+        function updateResultsDisplay() {
+            if (!encryptionResults) return;
+            
+            originalKeyElement.textContent = '[' + encryptionResults.key.join(', ') + ']';
+            keyLengthElement.textContent = `${encryptionResults.key.length} بت`;
+            
+            bulkStateElement.textContent = formatVector(encryptionResults.scrambledBulk, 8);
+            bulkSizeElement.textContent = `${encryptionResults.scrambledBulk.length} عنصر`;
+            
+            boundarySignatureElement.textContent = 
+                `القاعدة: ${encryptionResults.boundarySignature.norm.toFixed(4)}\n` +
+                `الإنتروبيا: ${encryptionResults.boundarySignature.entropy.toFixed(4)}\n` +
+                `البصمة: ${encryptionResults.boundarySignature.signature.toFixed(4)}`;
+            
+            signatureValueElement.textContent = encryptionResults.boundarySignature.signature.toFixed(2);
+            
+            encryptionStrengthElement.textContent = 
+                `الشدة: ${encryptionResults.intensity}\n` +
+                `البعد: ${encryptionResults.dimension}\n` +
+                `التماثل: ${(100 - encryptionResults.encryptionStrength).toFixed(1)}%`;
+            
+            strengthValueElement.textContent = `${encryptionResults.encryptionStrength.toFixed(1)}%`;
+        }
+        
+        function formatVector(vector, maxItems) {
+            if (vector.length <= maxItems) {
+                return '[' + vector.map(x => x.toFixed(2)).join(', ') + ']';
+            } else {
+                let first = vector.slice(0, 3).map(x => x.toFixed(2)).join(', ');
+                let last = vector.slice(-3).map(x => x.toFixed(2)).join(', ');
+                return `[${first}, ..., ${last}]`;
+            }
+        }
+        
+        // تفاعل مع OpenRouter AI
+        async function callOpenRouterAPI(messages) {
+            if (!currentApiKey) {
+                throw new Error('الرجاء إدخال مفتاح OpenRouter API');
+            }
+            
+            try {
+                const response = await axios.post(
+                    'https://openrouter.ai/api/v1/chat/completions',
+                    {
+                        model: currentModel,
+                        messages: messages,
+                        temperature: 0.7,
+                        max_tokens: 2000,
+                        stream: false
+                    },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${currentApiKey}`,
+                            'Content-Type': 'application/json',
+                            'HTTP-Referer': window.location.origin,
+                            'X-Title': 'Holographic Encryption System'
+                        }
+                    }
+                );
+                
+                return response.data.choices[0].message.content;
+            } catch (error) {
+                console.error('OpenRouter Error:', error);
+                throw new Error(`فشل الاتصال: ${error.response?.data?.error?.message || error.message}`);
+            }
+        }
+        
+        // تحليل النتائج بالذكاء الاصطناعي
+        async function analyzeWithAI() {
+            if (!currentApiKey) {
+                alert('الرجاء إدخال مفتاح OpenRouter API أولاً');
+                return;
+            }
+            
+            if (!encryptionResults) {
+                alert('الرجاء تشغيل التشفير أولاً');
+                return;
+            }
+            
+            showLoading();
+            addUserMessage("تحليل نتائج التشفير الحالية");
+            
+            const prompt = `أنت خبير في التشفير الهولوغرافي والفيزياء الكمومية. 
+            
+تحليل نتائج التشفير:
+1. المفتاح الأصلي: ${encryptionResults.key.join(', ')}
+2. طول المفتاح: ${encryptionResults.key.length} بت
+3. شدة التشتيت: ${encryptionResults.intensity}/10
+4. حجم البعد: ${encryptionResults.dimension}
+5. بصمة الحدود: ${encryptionResults.boundarySignature.signature.toFixed(4)}
+6. قوة التشفير: ${encryptionResults.encryptionStrength.toFixed(1)}%
+
+قم بتحليل هذه النتاج من حيث:
+1. جودة التشفير والأمان
+2. مدى تعقيد النظام
+3. التوصيات لتحسين النظام
+4. التطبيقات المحتملة
+
+أجب باللغة العربية وبأسلوب علمي واضح.`;
+
+            try {
+                const aiResponse = await callOpenRouterAPI([
+                    {
+                        role: "system",
+                        content: "أنت مساعد متخصص في التشفير الهولوغرافي والفيزياء الكمومية. أجب باللغة العربية دائماً."
+                    },
+                    {
+                        role: "user",
+                        content: prompt
+                    }
+                ]);
+                
+                addAIMessage(aiResponse);
+                hideLoading();
+            } catch (error) {
+                addAIMessage(`❌ خطأ: ${error.message}`);
+                hideLoading();
+            }
+        }
+        
+        // توليد تقرير متقدم
+        async function generateReport() {
+            if (!currentApiKey) {
+                alert('الرجاء إدخال مفتاح OpenRouter API أولاً');
+                return;
+            }
+            
+            if (!encryptionResults) {
+                alert('الرجاء تشغيل التشفير أولاً');
+                return;
+            }
+            
+            showLoading();
+            addUserMessage("توليد تقرير متقدم عن النظام");
+            
+            const prompt = `أنت خبير في التشفير الهولوغرافي. قم بتوليد تقرير متقدم يحتوي على:
+
+1. **ملخص تنفيذي**: نظرة عامة على النظام ونتائج التشفير
+2. **التحليل الفني**: 
+   - تحليل خوارزمية التشتيت
+   - تقييم أمن النظام
+   - تحليل الإحصائيات (الإنتروبيا، القاعدة، البصمة)
+3. **تقييم الأمان**:
+   - نقاط القوة
+   - نقاط الضعف المحتملة
+   - مقاومة الهجمات
+4. **التوصيات**:
+   - تحسينات مقترحة
+   - معايير الأمان المقترحة
+5. **الخاتمة**: ملاحظات ختامية وتوقعات مستقبلية
+
+استخدم البيانات التالية:
+- طول المفتاح: ${encryptionResults.key.length} بت
+- شدة التشتيت: ${encryptionResults.intensity}
+- حجم البعد: ${encryptionResults.dimension}
+- بصمة الحدود: ${encryptionResults.boundarySignature.signature.toFixed(4)}
+- الإنتروبيا: ${encryptionResults.boundarySignature.entropy.toFixed(4)}
+- قوة التشفير: ${encryptionResults.encryptionStrength.toFixed(1)}%
+
+أجب باللغة العربية وبصيغة تقرير احترافي مع عناوين فرعية.`;
+
+            try {
+                const aiResponse = await callOpenRouterAPI([
+                    {
+                        role: "system",
+                        content: "أنت مساعد متخصص في كتابة التقارير الفنية عن أنظمة التشفير. أجب باللغة العربية."
+                    },
+                    {
+                        role: "user",
+                        content: prompt
+                    }
+                ]);
+                
+                // فتح التقرير في نافذة جديدة
+                const reportWindow = window.open('', '_blank');
+                reportWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html dir="rtl">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>تقرير التشفير الهولوغرافي</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 40px; line-height: 1.8; }
+                            h1 { color: #0c2461; border-bottom: 2px solid #4bcffa; padding-bottom: 10px; }
+                            h2 { color: #1e3799; margin-top: 30px; }
+                            h3 { color: #4bcffa; }
+                            .header { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+                            .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+                            .stat-card { background: #e3f2fd; padding: 15px; border-radius: 8px; border-left: 4px solid #4bcffa; }
+                            pre { background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>تقرير نظام التشفير الهولوغرافي</h1>
+                            <p><strong>الباحث:</strong> Ammar Nasir Hussein al-mantafji</p>
+                            <p><strong>التاريخ:</strong> ${new Date().toLocaleDateString('ar-SA')}</p>
+                        </div>
+                        <div class="stats">
+                            <div class="stat-card"><strong>طول المفتاح:</strong> ${encryptionResults.key.length} بت</div>
+                            <div class="stat-card"><strong>قوة التشفير:</strong> ${encryptionResults.encryptionStrength.toFixed(1)}%</div>
+                            <div class="stat-card"><strong>إنتروبيا النظام:</strong> ${encryptionResults.boundarySignature.entropy.toFixed(4)}</div>
+                            <div class="stat-card"><strong>بصمة الحدود:</strong> ${encryptionResults.boundarySignature.signature.toFixed(4)}</div>
+                        </div>
+                        <div>${aiResponse.replace(/\n/g, '<br>').replace(/## (.*?):/g, '<h2>$1</h2>').replace(/### (.*?):/g, '<h3>$1</h3>')}</div>
+                    </body>
+                    </html>
+                `);
+                reportWindow.document.close();
+                
+                hideLoading();
+            } catch (error) {
+                addAIMessage(`❌ خطأ في توليد التقرير: ${error.message}`);
+                hideLoading();
+            }
+        }
+        
+        // نظام المحادثة
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            if (!currentApiKey) {
+                alert('الرجاء إدخال مفتاح OpenRouter API أولاً');
+                return;
+            }
+            
+            // إضافة رسالة المستخدم
+            addUserMessage(message);
+            chatInput.value = '';
+            
+            // إضافة مؤشر الكتابة
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'typing-indicator';
+            typingIndicator.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <span style="margin-right: 10px;">جاري الكتابة...</span>
+            `;
+            chatMessages.appendChild(typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // إعداد السياق
+            let context = [
+                {
+                    role: "system",
+                    content: `أنت مساعد متخصص في التشفير الهولوغرافي والفيزياء الكمومية. 
+أنت تساعد الباحث Ammar Nasir Hussein al-mantafji في تطوير نظام تشفير متقدم.
+استخدم المصطلحات العلمية المناسبة وأجب باللغة العربية.
+                    
+المعلومات الحالية عن النظام:
+${encryptionResults ? `
+- طول المفتاح: ${encryptionResults.key.length} بت
+- شدة التشتيت: ${encryptionResults.intensity}/10
+- قوة التشفير: ${encryptionResults.encryptionStrength.toFixed(1)}%
+- بصمة الحدود: ${encryptionResults.boundarySignature.signature.toFixed(4)}
+` : 'لم يتم تشغيل التشفير بعد.'}`
+                }
+            ];
+            
+            // إضافة سجل المحادثة
+            chatHistory.forEach(msg => {
+                context.push({
+                    role: msg.role,
+                    content: msg.content
+                });
+            });
+            
+            context.push({
+                role: "user",
+                content: message
+            });
+            
+            try {
+                const aiResponse = await callOpenRouterAPI(context);
+                
+                // إزالة مؤشر الكتابة
+                chatMessages.removeChild(typingIndicator);
+                
+                // إضافة رد الذكاء الاصطناعي
+                addAIMessage(aiResponse);
+                
+                // تحديث سجل المحادثة
+                chatHistory.push({ role: "user", content: message });
+                chatHistory.push({ role: "assistant", content: aiResponse });
+                
+                // الحفاظ على حجم معقول للسجل
+                if (chatHistory.length > 20) {
+                    chatHistory = chatHistory.slice(-20);
+                }
+                
+            } catch (error) {
+                chatMessages.removeChild(typingIndicator);
+                addAIMessage(`❌ خطأ: ${error.message}`);
+            }
+        }
+        
+        function addUserMessage(content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <i class="fas fa-user"></i>
+                    أنت
+                </div>
+                <div class="message-content">${content}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addAIMessage(content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ai';
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <i class="fas fa-robot"></i>
+                    مساعد الذكاء الاصطناعي
+                </div>
+                <div class="message-content">${content}</div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // وظائف مساعدة
+        function showLoading() {
+            loadingOverlay.classList.add('active');
+        }
+        
+        function hideLoading() {
+            loadingOverlay.classList.remove('active');
+        }
+        
+        function animateResults() {
+            const cards = document.querySelectorAll('.result-card');
+            cards.forEach((card, index) => {
+                card.style.transform = 'translateY(-10px) scale(1.02)';
+                card.style.boxShadow = '0 15px 40px rgba(0, 168, 255, 0.3)';
+                
+                setTimeout(() => {
+                    card.style.transform = 'translateY(-5px) scale(1.01)';
+                    card.style.boxShadow = '0 10px 30px rgba(0, 168, 255, 0.2)';
+                }, 300 + index * 100);
+            });
+        }
+        
+        // تحديث المفتاح بشكل دوري
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                generateRandomKey();
+                if (encryptionResults) {
+                    runScrambling();
+                }
+            }
+        }, 15000);
+    </script>
+</body>
+</html>
