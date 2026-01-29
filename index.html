@@ -1017,25 +1017,25 @@
                 <div class="experiment-results">
                     <div class="result-metric">
                         <div class="metric-name">رؤية الداخل</div>
-                        <div class="metric-value" id="bulk-visibility">4.2</div>
+                        <div class="metric-value" id="bulk-visibility">0.0</div>
                         <div class="metric-unit">%</div>
                     </div>
                     
                     <div class="result-metric">
                         <div class="metric-name">ارتباط الحدود</div>
-                        <div class="metric-value" id="boundary-correlation">0.98</div>
+                        <div class="metric-value" id="boundary-correlation">0.00</div>
                         <div class="metric-unit">معامل</div>
                     </div>
                     
                     <div class="result-metric">
                         <div class="metric-name">دقة الاسترداد</div>
-                        <div class="metric-value" id="recovery-fidelity">99.1</div>
+                        <div class="metric-value" id="recovery-fidelity">0.0</div>
                         <div class="metric-unit">%</div>
                     </div>
                     
                     <div class="result-metric">
                         <div class="metric-name">أس ليابانوف</div>
-                        <div class="metric-value" id="lyapunov-exponent">0.42</div>
+                        <div class="metric-value" id="lyapunov-exponent">0.00</div>
                         <div class="metric-unit">λ<sub>L</sub></div>
                     </div>
                 </div>
@@ -1574,168 +1574,282 @@
             askAI(prompt);
         }
 
-        // توليد تقرير مفصل
+        // توليد تقرير مفصل - النسخة المحسنة
         async function generateReport() {
-            if (!apiKey) {
-                showNotification('الرجاء إدخال مفتاح OpenRouter API أولاً');
-                return;
-            }
-            
             if (!experimentResults) {
                 showNotification('الرجاء تشغيل تجربة أولاً');
                 return;
             }
             
-            const prompt = `أنت مساعد كتابة تقارير مختبر OBD. قم بكتابة تقرير علمي مفصل يحتوي على:
-
-1. معلومات التجربة:
-   - التاريخ والوقت: ${new Date(experimentResults.timestamp).toLocaleString('ar-SA')}
-   - الباحث المشرف: Ammar Nasir Hussein al-mantafji
-   - نوع التجربة: OBD - Observable Boundary Dynamics
-
-2. المعاملات التجريبية:
-   - قوة الليزر: ${experimentResults.laserPower} ميجاوات
-   - إنتروبيا وسط التشتيت: ${experimentResults.entropy}%
-   - مدة التشتيت: ${experimentResults.scrambleTime} ملي ثانية
-   - مستوى ضوضاء المحيط: ${experimentResults.noise} ديسيبل
-
-3. النتائج القياسية:
-   - رؤية الداخل: ${experimentResults.bulkVisibility.toFixed(2)}%
-   - ارتباط الحدود: ${experimentResults.boundaryCorrelation.toFixed(3)}
-   - دقة استرداد المعلومات: ${experimentResults.recoveryFidelity.toFixed(2)}%
-   - أس ليابانوف: ${experimentResults.lyapunovExponent.toFixed(3)}
-
-4. التحليل العلمي:
-   - تفسير ظاهرة "الموت العملي" للداخل
-   - كفاءة هجرة المعلومات إلى الحدود
-   - تأثير العوامل المختلفة على الأس ليابانوف
-   - مقارنة مع النتائج النظرية
-
-5. الاستنتاجات والتوصيات:
-   - تقييم نجاح التجربة
-   - نقاط القوة والضعف
-   - توصيات للتجارب المستقبلية
-   - التطبيقات المحتملة
-
-6. المراجع العلمية:
-   - ذكر البحث الأصلي OBD_New29_1_2026.pdf
-   - المراجع ذات الصلة
-
-أكتب التقرير باللغة العربية وبصيغة علمية احترافية مع عناوين فرعية مناسبة.`;
-
-            showLoading('جاري توليد التقرير...');
+            showLoading('جاري إنشاء التقرير...');
             
-            try {
-                const response = await callOpenRouterAPI(prompt);
+            // محتوى التقرير الثابت (بدون الذكاء الاصطناعي)
+            const reportContent = `
+                <h2>📊 تحليل نتائج تجربة OBD</h2>
+                <p>تم إجراء هذه التجربة في مختبر OBD المتقدم تحت إشراف الباحث <strong>Ammar Nasir Hussein al-mantafji</strong>.</p>
                 
-                // فتح التقرير في نافذة جديدة
-                const reportWindow = window.open('', '_blank');
-                reportWindow.document.write(`
-                    <!DOCTYPE html>
-                    <html dir="rtl">
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>تقرير مختبر OBD</title>
-                        <style>
-                            body { 
-                                font-family: 'Arial', sans-serif; 
-                                padding: 40px; 
-                                line-height: 1.8;
-                                background: #f5f5f5;
-                                color: #333;
+                <h3>🔬 ملخص النتائج:</h3>
+                <p>1. <strong>رؤية الداخل (${experimentResults.bulkVisibility.toFixed(2)}%):</strong> تشير هذه النسبة المنخفضة إلى نجاح عملية "الموت العملي" للمعلومات في المنطقة الداخلية (Bulk)، مما يعني أن المعلومات قد تم تشفيرها بشكل فعال على الحدود.</p>
+                
+                <p>2. <strong>ارتباط الحدود (${experimentResults.boundaryCorrelation.toFixed(3)}):</strong> هذه القيمة القريبة من 1 تدل على كفاءة عالية في نقل المعلومات من الداخل إلى الحدود مع الحفاظ على العلاقات السببية والهيكلية.</p>
+                
+                <p>3. <strong>دقة الاسترداد (${experimentResults.recoveryFidelity.toFixed(2)}%):</strong> هذه النسبة العالية تعكس جودة عملية فك التشفير من الحدود وتحافظ على سلامة المعلومات رغم عملية التشتيت المعقدة.</p>
+                
+                <p>4. <strong>أس ليابانوف (${experimentResults.lyapunovExponent.toFixed(3)}):</strong> هذه القيمة تشير إلى معدل نمو الأخطاء في النظام وتعكس توازنًا بين استقرار النظام وقدرته على تشفير المعلومات بشكل آمن.</p>
+                
+                <h3>⚙️ تحليل المعاملات:</h3>
+                <p>• <strong>قوة الليزر (${experimentResults.laserPower} ميجاوات):</strong> كانت كافية لبدء عملية التشفير دون إحداث تشويش زائد.</p>
+                <p>• <strong>إنتروبيا الوسط (${experimentResults.entropy}%):</strong> ساهمت في عملية التشتيت الفعالة للمعلومات.</p>
+                <p>• <strong>زمن التشتيت (${experimentResults.scrambleTime} ملي ثانية):</strong> كان مناسبًا لتحقيق التوازن بين الفعالية والكفاءة.</p>
+                <p>• <strong>مستوى الضوضاء (${experimentResults.noise} ديسيبل):</strong> كان ضمن الحدود المقبولة ولم يؤثر بشكل كبير على دقة النتائج.</p>
+                
+                <h3>📈 التوصيات:</h3>
+                <p>1. زيادة إنتروبيا الوسط لتحسين عملية التشتيت.</p>
+                <p>2. تقليل مستوى الضوضاء البيئية لزيادة دقة الاسترداد.</p>
+                <p>3. ضبط زمن التشتيت لتحقيق أفضل توازن بين السرعة والدقة.</p>
+                <p>4. إجراء تجارب متكررة للتحقق من ثبات النتائج.</p>
+                
+                <h3>🔗 المراجع العلمية:</h3>
+                <p>1. البحث الأصلي: OBD_New29_1_2026.pdf - Observable Boundary Dynamics</p>
+                <p>2. أبحاث فيزياء الكم والهولوغرافيا</p>
+                <p>3. دراسات في أنظمة المعلومات الكمومية</p>
+            `;
+            
+            // إنشاء HTML للتقرير
+            const reportHTML = `
+                <!DOCTYPE html>
+                <html dir="rtl" lang="ar">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>تقرير مختبر OBD</title>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                    <style>
+                        * {
+                            margin: 0;
+                            padding: 0;
+                            box-sizing: border-box;
+                            font-family: 'Segoe UI', 'Arial', sans-serif;
+                        }
+                        
+                        body {
+                            background: #f0f5ff;
+                            color: #333;
+                            line-height: 1.8;
+                            padding: 20px;
+                        }
+                        
+                        .report-container {
+                            max-width: 1200px;
+                            margin: 0 auto;
+                            background: white;
+                            border-radius: 15px;
+                            box-shadow: 0 10px 30px rgba(0, 50, 150, 0.2);
+                            overflow: hidden;
+                        }
+                        
+                        .header {
+                            background: linear-gradient(135deg, #0066ff, #0044cc);
+                            color: white;
+                            padding: 40px;
+                            text-align: center;
+                        }
+                        
+                        .header h1 {
+                            font-size: 2.5rem;
+                            margin-bottom: 15px;
+                            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                        }
+                        
+                        .header p {
+                            font-size: 1.2rem;
+                            opacity: 0.9;
+                        }
+                        
+                        .summary-grid {
+                            display: grid;
+                            grid-template-columns: repeat(2, 1fr);
+                            gap: 20px;
+                            padding: 30px;
+                            background: #f8f9fa;
+                        }
+                        
+                        .summary-card {
+                            background: white;
+                            padding: 25px;
+                            border-radius: 10px;
+                            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+                            text-align: center;
+                            border-left: 5px solid #0066ff;
+                            transition: transform 0.3s ease;
+                        }
+                        
+                        .summary-card:hover {
+                            transform: translateY(-5px);
+                        }
+                        
+                        .summary-card h3 {
+                            color: #0066ff;
+                            margin-bottom: 15px;
+                            font-size: 1.3rem;
+                        }
+                        
+                        .summary-card .value {
+                            font-size: 2.5rem;
+                            font-weight: bold;
+                            color: #333;
+                            margin: 10px 0;
+                        }
+                        
+                        .summary-card .unit {
+                            color: #666;
+                            font-size: 1rem;
+                        }
+                        
+                        .parameters-table {
+                            width: calc(100% - 60px);
+                            border-collapse: collapse;
+                            margin: 30px;
+                            background: white;
+                            border-radius: 10px;
+                            overflow: hidden;
+                            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+                        }
+                        
+                        .parameters-table th {
+                            background: #0066ff;
+                            color: white;
+                            padding: 18px;
+                            text-align: right;
+                            font-weight: 600;
+                        }
+                        
+                        .parameters-table td {
+                            padding: 15px 20px;
+                            border-bottom: 1px solid #eee;
+                            text-align: center;
+                        }
+                        
+                        .parameters-table tr:hover {
+                            background: #f8f9fa;
+                        }
+                        
+                        .report-content {
+                            padding: 40px;
+                        }
+                        
+                        .report-content h2 {
+                            color: #0066ff;
+                            font-size: 1.8rem;
+                            margin: 30px 0 20px;
+                            padding-bottom: 10px;
+                            border-bottom: 2px solid #e9ecef;
+                        }
+                        
+                        .report-content h3 {
+                            color: #00a8ff;
+                            font-size: 1.5rem;
+                            margin: 25px 0 15px;
+                        }
+                        
+                        .report-content p {
+                            font-size: 1.1rem;
+                            line-height: 1.9;
+                            color: #444;
+                            margin-bottom: 15px;
+                            text-align: justify;
+                        }
+                        
+                        .footer {
+                            background: #f8f9fa;
+                            padding: 30px;
+                            text-align: center;
+                            color: #666;
+                            border-top: 1px solid #dee2e6;
+                        }
+                        
+                        .footer .researcher {
+                            font-size: 1.3rem;
+                            color: #0066ff;
+                            font-weight: bold;
+                            margin: 10px 0;
+                        }
+                        
+                        @media print {
+                            body {
+                                padding: 0;
                             }
-                            .header { 
-                                background: linear-gradient(135deg, #0066ff, #0044cc);
-                                color: white;
-                                padding: 30px;
-                                border-radius: 10px;
-                                margin-bottom: 30px;
-                                text-align: center;
+                            
+                            .report-container {
+                                box-shadow: none;
+                                border-radius: 0;
                             }
-                            h1 { color: white; margin-bottom: 10px; }
-                            h2 { color: #0066ff; margin-top: 30px; border-bottom: 2px solid #0066ff; padding-bottom: 10px; }
-                            h3 { color: #00a8ff; }
-                            .results-grid {
-                                display: grid;
-                                grid-template-columns: repeat(2, 1fr);
-                                gap: 20px;
-                                margin: 20px 0;
+                            
+                            .summary-card {
+                                break-inside: avoid;
                             }
-                            .result-card {
-                                background: white;
+                        }
+                        
+                        @media (max-width: 768px) {
+                            .summary-grid {
+                                grid-template-columns: 1fr;
+                            }
+                            
+                            .header h1 {
+                                font-size: 2rem;
+                            }
+                            
+                            .report-content {
                                 padding: 20px;
-                                border-radius: 8px;
-                                border-left: 5px solid #00a8ff;
-                                box-shadow: 0 3px 10px rgba(0,0,0,0.1);
                             }
-                            .parameter-table {
-                                width: 100%;
-                                border-collapse: collapse;
-                                margin: 20px 0;
-                                background: white;
-                                border-radius: 8px;
-                                overflow: hidden;
-                                box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+                            
+                            .parameters-table {
+                                width: calc(100% - 20px);
+                                margin: 20px 10px;
                             }
-                            .parameter-table th {
-                                background: #0066ff;
-                                color: white;
-                                padding: 15px;
-                                text-align: right;
-                            }
-                            .parameter-table td {
-                                padding: 12px 15px;
-                                border-bottom: 1px solid #eee;
-                            }
-                            .footer {
-                                margin-top: 40px;
-                                padding-top: 20px;
-                                border-top: 2px solid #0066ff;
-                                color: #666;
-                                text-align: center;
-                            }
-                        </style>
-                    </head>
-                    <body>
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="report-container">
                         <div class="header">
-                            <h1>تقرير مختبر OBD التجريبي</h1>
+                            <h1><i class="fas fa-flask"></i> تقرير مختبر OBD التجريبي</h1>
                             <p>تجربة Observable Boundary Dynamics</p>
-                            <p style="opacity: 0.9;">الباحث المشرف: Ammar Nasir Hussein al-mantafji - ${new Date().toLocaleDateString('ar-SA')}</p>
+                            <p style="margin-top: 15px; opacity: 0.8;">
+                                التاريخ: ${new Date().toLocaleDateString('ar-SA')} - الوقت: ${new Date().toLocaleTimeString('ar-SA')}
+                            </p>
                         </div>
                         
-                        <div class="results-grid">
-                            <div class="result-card">
-                                <h3>👁️ رؤية الداخل</h3>
-                                <p style="font-size: 2rem; color: #0066ff; font-weight: bold;">
-                                    ${experimentResults.bulkVisibility.toFixed(2)}%
-                                </p>
+                        <div class="summary-grid">
+                            <div class="summary-card">
+                                <h3><i class="fas fa-eye"></i> رؤية الداخل</h3>
+                                <div class="value">${experimentResults.bulkVisibility.toFixed(2)}</div>
+                                <div class="unit">نسبة مئوية</div>
                             </div>
-                            <div class="result-card">
-                                <h3>🔗 ارتباط الحدود</h3>
-                                <p style="font-size: 2rem; color: #00a8ff; font-weight: bold;">
-                                    ${experimentResults.boundaryCorrelation.toFixed(3)}
-                                </p>
+                            
+                            <div class="summary-card">
+                                <h3><i class="fas fa-link"></i> ارتباط الحدود</h3>
+                                <div class="value">${experimentResults.boundaryCorrelation.toFixed(3)}</div>
+                                <div class="unit">معامل ارتباط</div>
                             </div>
-                            <div class="result-card">
-                                <h3>🎯 دقة الاسترداد</h3>
-                                <p style="font-size: 2rem; color: #1dd1a1; font-weight: bold;">
-                                    ${experimentResults.recoveryFidelity.toFixed(2)}%
-                                </p>
+                            
+                            <div class="summary-card">
+                                <h3><i class="fas fa-bullseye"></i> دقة الاسترداد</h3>
+                                <div class="value">${experimentResults.recoveryFidelity.toFixed(2)}</div>
+                                <div class="unit">نسبة مئوية</div>
                             </div>
-                            <div class="result-card">
-                                <h3>⚡ أس ليابانوف</h3>
-                                <p style="font-size: 2rem; color: #9b59b6; font-weight: bold;">
-                                    ${experimentResults.lyapunovExponent.toFixed(3)}
-                                </p>
+                            
+                            <div class="summary-card">
+                                <h3><i class="fas fa-bolt"></i> أس ليابانوف</h3>
+                                <div class="value">${experimentResults.lyapunovExponent.toFixed(3)}</div>
+                                <div class="unit">λ<sub>L</sub></div>
                             </div>
                         </div>
                         
-                        <table class="parameter-table">
+                        <table class="parameters-table">
                             <thead>
                                 <tr>
-                                    <th>المعامل</th>
-                                    <th>القيمة</th>
-                                    <th>الوحدة</th>
+                                    <th colspan="3"><i class="fas fa-sliders-h"></i> معاملات التجربة</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1762,24 +1876,52 @@
                             </tbody>
                         </table>
                         
-                        <div>
-                            ${response.replace(/\n/g, '<br>').replace(/## (.*?):/g, '<h2>$1</h2>').replace(/### (.*?):/g, '<h3>$1</h3>')}
+                        <div class="report-content">
+                            ${reportContent}
                         </div>
                         
                         <div class="footer">
-                            <p>© 2026 مختبر OBD التجريبي - نظام بحثي تحت إشراف الباحث Ammar Nasir Hussein al-mantafji</p>
+                            <p>تم إعداد هذا التقرير بواسطة نظام مختبر OBD التجريبي المتقدم</p>
+                            <p class="researcher">الباحث المشرف: Ammar Nasir Hussein al-mantafji</p>
+                            <p style="margin-top: 20px;">
+                                <i class="fas fa-calendar"></i> ${new Date().toLocaleString('ar-SA')}
+                            </p>
+                            <p style="margin-top: 10px; font-size: 0.9rem; color: #888;">
+                                © 2026 مختبر OBD التجريبي - جميع الحقوق محفوظة
+                            </p>
                         </div>
-                    </body>
-                    </html>
-                `);
-                reportWindow.document.close();
-                
-                hideLoading();
-                showNotification('تم إنشاء التقرير بنجاح!');
-                
+                    </div>
+                    
+                    <script>
+                        // إضافة وظيفة الطباعة
+                        window.onload = function() {
+                            setTimeout(() => {
+                                // يمكن تفعيل الطباعة التلقائية إذا رغب المستخدم
+                                // window.print();
+                            }, 1000);
+                        };
+                    </script>
+                </body>
+                </html>
+            `;
+            
+            // محاولة فتح التقرير في نافذة جديدة
+            try {
+                const reportWindow = window.open('', '_blank', 'width=1200,height=800,scrollbars=yes');
+                if (reportWindow) {
+                    reportWindow.document.write(reportHTML);
+                    reportWindow.document.close();
+                    
+                    hideLoading();
+                    showNotification('✅ تم إنشاء التقرير بنجاح!');
+                } else {
+                    hideLoading();
+                    showNotification('❌ تعذر فتح نافذة التقرير. قد تحتاج إلى السماح بالنوافذ المنبثقة.');
+                }
             } catch (error) {
                 hideLoading();
-                showNotification(`❌ خطأ: ${error.message}`);
+                console.error('خطأ في فتح التقرير:', error);
+                showNotification('❌ حدث خطأ في إنشاء التقرير. حاول مرة أخرى.');
             }
         }
 
