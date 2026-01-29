@@ -1124,7 +1124,6 @@
 
     <script>
         // متغيرات النظام
-        let currentExperiment = null;
         let experimentResults = null;
         let apiKey = localStorage.getItem('obd_lab_api_key') || '';
         let aiModel = 'openai/gpt-3.5-turbo';
@@ -1204,7 +1203,7 @@
             // تشغيل التهيئة المرئية
             initializeVisualization();
             
-            // بدء محاكاة أولية
+            // بدء محاكاة أولية بعد التحميل
             setTimeout(() => {
                 hideLoading();
                 runInitialDemo();
@@ -1526,6 +1525,21 @@
         function runExperiment() {
             showLoading('جاري تشغيل التجربة...');
             
+            // إعادة تعيين النتائج القديمة
+            document.getElementById('bulk-visibility').textContent = '0.0';
+            document.getElementById('boundary-correlation').textContent = '0.00';
+            document.getElementById('recovery-fidelity').textContent = '0.0';
+            document.getElementById('lyapunov-exponent').textContent = '0.00';
+            
+            // إعادة تعيين التصور المرئي
+            const laserBeam = document.getElementById('laser-beam');
+            const bulkMedium = document.getElementById('bulk-medium');
+            const boundarySensor = document.getElementById('boundary-sensor');
+            
+            laserBeam.style.transform = 'scaleX(1)';
+            bulkMedium.style.transform = 'scale(1)';
+            boundarySensor.style.transform = 'scale(1)';
+            
             setTimeout(() => {
                 simulateExperimentSteps();
                 
@@ -1562,7 +1576,7 @@
 - دقة الاسترداد (Recovery Fidelity): ${experimentResults.recoveryFidelity.toFixed(2)}%
 - أس ليابانوف (Lyapunov Exponent): ${experimentResults.lyapunovExponent.toFixed(3)}
 
-حلل هذه النتاج من حيث:
+حلل هذه النتائج من حيث:
 1. فعالية عملية "الموت العملي" للداخل
 2. جودة هجرة المعلومات إلى الحدود
 3. تأثير الضوضاء على الأداء
@@ -1574,8 +1588,8 @@
             askAI(prompt);
         }
 
-        // توليد تقرير مفصل - النسخة المحسنة
-        async function generateReport() {
+        // توليد تقرير مفصل
+        function generateReport() {
             if (!experimentResults) {
                 showNotification('الرجاء تشغيل تجربة أولاً');
                 return;
@@ -1623,7 +1637,6 @@
                     <meta charset="UTF-8">
                     <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <title>تقرير مختبر OBD</title>
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
                     <style>
                         * {
                             margin: 0;
